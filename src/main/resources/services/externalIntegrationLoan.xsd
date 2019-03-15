@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" xmlns:tns="http://www.bottomline.com/webseries/schema/external/message/loan/v1" xmlns:btacct="http://www.bottomline.com/webseries/schema/ps/platform/account/v1" xmlns:bttrans="http://www.bottomline.com/webseries/schema/ps/platform/transaction/v1" xmlns:btws="http://www.bottomline.com/webseries/schema/ps/platform/common/v1" xmlns:btmsg="http://www.bottomline.com/webseries/schema/ps/message/common/v1" xmlns:btpay="http://www.bottomline.com/webseries/schema/ps/platform/payment/v1" xmlns:btach="http://www.bottomline.com/webseries/schema/ps/platform/payment/ach/v1" xmlns:btwire="http://www.bottomline.com/webseries/schema/ps/platform/payment/wire/v1" xmlns:btloan="http://www.bottomline.com/webseries/schema/ps/platform/loan/v1" xmlns:btuser="http://www.bottomline.com/webseries/schema/ps/platform/user/v1" xmlns:btug="http://www.bottomline.com/webseries/schema/ps/platform/usergroup/v1" targetNamespace="http://www.bottomline.com/webseries/schema/external/message/loan/v1" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0" jaxb:version="2.1">
+    <xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/common/v1" schemaLocation="../domain/platformCommon.xsd"/>
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/message/common/v1" schemaLocation="platformMessage.xsd"/>
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/payment/v1" schemaLocation="../domain/platformPayment.xsd"/>
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/payment/wire/v1" schemaLocation="../domain/platformPaymentWire.xsd"/>
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/user/v1" schemaLocation="../domain/platformUser.xsd"/>
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/usergroup/v1" schemaLocation="../domain/platformUserGroup.xsd"/>
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/loan/v1" schemaLocation="../domain/platformLoan.xsd"/>
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/account/v1" schemaLocation="../domain/platformAccount.xsd"/>
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/transaction/v1" schemaLocation="../domain/platformTransaction.xsd"/>
+	<xsd:element name="sendToLoanSystemRequest" type="tns:SendToLoanSystemRequest" nillable="true"/>
+	<xsd:element name="sendToLoanSystemResponse" type="tns:SendToLoanSystemResponse" nillable="true"/>
+	<xsd:element name="loanBalanceRequest" type="tns:LoanBalanceRequest" nillable="true"/>
+	<xsd:element name="loanBalanceResponse" type="tns:LoanBalanceResponse" nillable="true"/>
+	<xsd:element name="loanAccountStatementRequest" type="tns:LoanAccountStatementRequest" nillable="true"/>
+	<xsd:element name="loanAccountStatementResponse" type="tns:LoanAccountStatementResponse" nillable="true"/>
+    <xsd:element name="loanInvoiceRequest" type="tns:LoanInvoiceRequest" nillable="true"/>
+    <xsd:element name="loanInvoiceResponse" type="tns:LoanInvoiceResponse" nillable="true"/>
+  
+	<xsd:complexType name="SendToLoanSystemRequest">
+		<xsd:sequence>
+			<xsd:element name="requestHeader" type="btmsg:RequestHeader">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">WebSeries standard request fields</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="requestInfo" type="btloan:LoanPaymentInfo">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Payment Info</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="SendToLoanSystemResponse">
+		<xsd:sequence>
+			<xsd:element name="responseHeader" type="btmsg:ResponseHeader">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">WebSeries standard response fields including boolean result and optionally error code and error messages</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="responseInfo" type="btloan:LoanResponseItem">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Loan System response code and message</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="LoanBalanceRequest">
+		<xsd:sequence>
+			<xsd:element name="requestHeader" type="btmsg:RequestHeader">
+				<xsd:annotation>
+					<xsd:documentation>Request Header.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="balanceReference" type="btacct:AccountDataFull" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Balance Reference Aggregate.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="LoanBalanceResponse">
+		<xsd:sequence>
+			<xsd:element name="responseHeader" type="btmsg:ResponseHeader"/>
+			<xsd:element name="balanceRecord" type="tns:BalanceRecord" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Balance Record. Required if request was successful. </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="BalanceRecord">
+		<xsd:sequence>
+			<xsd:element name="balanceData" type="btloan:LoanBalanceDataExtended" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Balance Record. Required if request was successful. </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="settings" type="btws:Setting" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Optional list of settings. May be used carry additional data required by specific implementations.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="balanceStatus" type="btmsg:Warning" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Item level balance status</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="LoanAccountStatementRequest">
+		<xsd:sequence>
+			<xsd:element name="requestHeader" type="btmsg:RequestHeader">
+				<xsd:annotation>
+					<xsd:documentation>Request Header.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="accountStatementReference" type="tns:AccountStatement" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Account Statement Aggregate.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="AccountStatement">
+		<xsd:sequence>
+			<xsd:element name="account" type="btacct:AccountDataFull" minOccurs="1" maxOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation>Account.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="acctStmtInfoDelta" type="bttrans:TransactionIdentifier" minOccurs="0" maxOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation>Account Statement High Water Mark (Delta).</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+            <xsd:element name="fromDate" type="xsd:date" minOccurs="0">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">Optional field used to specify upper lower bound of date range</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="toDate" type="xsd:date" minOccurs="0" >
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">Optional field used to specify upper range for date search.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="LoanAccountStatementResponse">
+		<xsd:sequence>
+			<xsd:element name="responseHeader" type="btmsg:ResponseHeader">
+				<xsd:annotation>
+					<xsd:documentation>Request Header.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="accountStatementRecord" type="tns:AccountStatementRecord" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Account Statement Record.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="AccountStatementRecord">
+		<xsd:sequence>
+			<xsd:element name="account" type="btacct:AccountDataFull" minOccurs="1" maxOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation>Account to which the statement lines belong.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="responseComplete" type="xsd:boolean" minOccurs="1" maxOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation>Flag to indicate the list is complete.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="acctStmtInfoCount" type="xsd:integer" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Number of transaction lines included.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="acctStmtInfo"
+				type="btloan:LoanTransactionData" minOccurs="0" maxOccurs="unbounded">
+			</xsd:element>
+			<xsd:element name="acctStmtInfoHighWaterMark" type="bttrans:TransactionIdentifier" minOccurs="0" maxOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation>Account Statement High Water Mark (Delta).</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="acctStmtStatus" type="btmsg:Warning"
+				minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>
+						Account Statement Status Aggregate
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+    <xsd:complexType name="LoanInvoiceRequest">
+        <xsd:sequence>
+            <xsd:element name="requestHeader" type="btmsg:RequestHeader">
+                <xsd:annotation>
+                    <xsd:documentation>Request Header.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="invoiceReference" type="btacct:AccountDataFull" maxOccurs="1">
+                <xsd:annotation>
+                    <xsd:documentation>Invoice Reference Aggregate.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="LoanInvoiceResponse">
+        <xsd:sequence>
+            <xsd:element name="responseHeader" type="btmsg:ResponseHeader"/>
+            <xsd:element name="accountPaymentType" type="btloan:LoanAccountPaymentType" maxOccurs="1">
+                <xsd:annotation>
+                    <xsd:documentation>Account Payment Type. Required if request was successful. </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="invoiceRecord" type="btloan:LoanInvoiceRecord" minOccurs="0" maxOccurs="unbounded">
+                <xsd:annotation>
+                    <xsd:documentation>Invoice Record. Required if request was successful. </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+</xsd:schema>

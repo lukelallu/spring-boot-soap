@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:btdetail="http://www.bottomline.com/webseries/schema/ps/platform/detail/v1" targetNamespace="http://www.bottomline.com/webseries/schema/ps/platform/detail/v1" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+	<xsd:complexType name="DetailColumn">
+		<xsd:sequence>
+			<xsd:element name="tableName" type="xsd:string"/>
+			<xsd:element name="columnName" type="xsd:string"/>
+			<xsd:element name="columnValue" type="xsd:string" nillable="true"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="DetailGrid">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">Each detail item may have one or more child grids representing a one to many relationship. In some cases these will be returned with the detail model (model.getGridModel())> For example this is the case when detail is a User Model. Child records are returned to detail roles assigned to user. </xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="name" type="xsd:string"/>
+			<xsd:element name="rows" type="btdetail:DetailRow" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="DetailRow">
+		<xsd:sequence>
+			<xsd:element name="columns" type="btdetail:DetailColumn" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

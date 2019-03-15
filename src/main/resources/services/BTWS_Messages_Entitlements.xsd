@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2010 rel. 2 (x64) (http://www.altova.com) by Bottomline Technologies -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:btemsg="http://www.bottomline.com/webseries/schema/is/message/entitlement/v1" 
+				xmlns:btct="http://www.bottomline.com/webseries/schema/is/message/common/v1" xmlns:btet="http://www.bottomline.com/webseries/schema/cibc/view/entitlement/v1" 
+				xmlns:btut="http://www.bottomline.com/webseries/schema/ps/tmaint/user/v1" targetNamespace="http://www.bottomline.com/webseries/schema/is/message/entitlement/v1" 
+				xmlns:tns="http://www.bottomline.com/webseries/schema/is/message/entitlement/v1"
+				elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+	<!--Based on BTWS 7.0-->
+	<!--Last Updated 1/21/2011-->
+	<!-- CIBC related artifacts will be removed/refactored in a future release. DGB JIRA# - NH-38056  -->
+	<xs:import namespace="http://www.bottomline.com/webseries/schema/is/message/common/v1" schemaLocation="../services/BTWS_Complex_Types_Common.xsd"/>
+	<xs:import namespace="http://www.bottomline.com/webseries/schema/cibc/view/entitlement/v1" schemaLocation="../domain/BTWS_Complex_Types_Entitlements.xsd"/>
+	<xs:import namespace="http://www.bottomline.com/webseries/schema/ps/tmaint/user/v1" schemaLocation="../domain/BTWS_Complex_Types_User.xsd"/>
+	
+	<xs:element name="entitlementsEnquiryReq" type="tns:EntitlementsEnquiryReq" nillable="true"/>
+	<xs:element name="entitlementsEnquiryRsp" type="tns:EntitlementsEnquiryRsp" nillable="true"/>
+	
+	<xs:complexType name="EntitlementsEnquiryReq">
+		<xs:sequence>
+			<xs:element name="MsgRqHeader" type="btct:MsgRqHeaderType"/>
+			<xs:choice>
+				<xs:element name="GetEntitlementsReq" minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="UserGroup">
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="8"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="UserID">
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="8"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="GetProductListReq" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="ProductCode" minOccurs="0" maxOccurs="unbounded">
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="8"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="FunctionCode" minOccurs="0" maxOccurs="unbounded">
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="8"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="TypeCode" minOccurs="0" maxOccurs="unbounded">
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="8"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="ActionMode" minOccurs="0" maxOccurs="unbounded">
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="8"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="EntryClass" type="xs:int" minOccurs="0" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="GetUserListReq" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="ProductCode" maxOccurs="unbounded">
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="8"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="TypeCode" minOccurs="0" maxOccurs="unbounded">
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="8"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="EntryClass" type="xs:int" minOccurs="0" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:choice>
+		</xs:sequence>
+		<xs:attribute name="RequestType">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="GetEntitlementsReq"/>
+					<xs:enumeration value="GetProductListReq"/>
+					<xs:enumeration value="GetUserListReq"/>
+					<xs:enumeration value="GetClientUserGroupReq"/>
+					<xs:enumeration value="GetClientUserReq"/>
+					<xs:enumeration value="GetExtRefReq"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	
+	<xs:complexType name="EntitlementsEnquiryRsp">
+		<xs:sequence>
+			<xs:element name="MsgRqHeader">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="btct:MsgRqHeaderType"/>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="MsgRsp" type="btct:MsgRsp"/>
+			<xs:choice>
+				<xs:element name="GetProductListRsp" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>Obtained from Types table in the client schema</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="ProductCode" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:complexContent>
+										<xs:extension base="btet:CodeDescPairType">
+											<xs:sequence>
+												<xs:element name="TypeCode" maxOccurs="unbounded">
+													<xs:complexType>
+														<xs:complexContent>
+															<xs:extension base="btet:CodeDescPairType">
+																<xs:sequence>
+																	<xs:element name="FunctionCode" maxOccurs="unbounded">
+																		<xs:complexType>
+																			<xs:complexContent>
+																				<xs:extension base="btet:CodeDescPairType">
+																					<xs:sequence>
+																						<xs:element name="EntryClass" maxOccurs="unbounded">
+																							<xs:complexType>
+																								<xs:complexContent>
+																									<xs:extension base="btet:CodeDescPairType">
+																										<xs:sequence>
+																											<xs:element name="Action" type="btet:CodeDescPairType" maxOccurs="unbounded"/>
+																										</xs:sequence>
+																									</xs:extension>
+																								</xs:complexContent>
+																							</xs:complexType>
+																						</xs:element>
+																					</xs:sequence>
+																				</xs:extension>
+																			</xs:complexContent>
+																		</xs:complexType>
+																	</xs:element>
+																</xs:sequence>
+															</xs:extension>
+														</xs:complexContent>
+													</xs:complexType>
+												</xs:element>
+											</xs:sequence>
+										</xs:extension>
+									</xs:complexContent>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="GetEntitlementsRsp" type="btet:ClientEntitlementsType" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="GetUserListRsp" type="btut:ClientUserType" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

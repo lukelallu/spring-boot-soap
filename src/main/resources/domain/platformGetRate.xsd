@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2012 rel. 2 (x64) (http://www.altova.com) by Bottomline Technologies (Bottomline Technologies) -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:btamt="http://www.bottomline.com/webseries/schema/ps/platform/amount/v1" xmlns:btfx="http://www.bottomline.com/webseries/schema/ps/platform/fx/v1" xmlns:btws="http://www.bottomline.com/webseries/schema/ps/platform/common/v1" xmlns:btacct="http://www.bottomline.com/webseries/schema/ps/platform/account/v1" xmlns:tns="http://www.bottomline.com/webseries/schema/ps/platform/getRate/v1" targetNamespace="http://www.bottomline.com/webseries/schema/ps/platform/getRate/v1" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/amount/v1" schemaLocation="platformAmount.xsd"/>
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/fx/v1" schemaLocation="platformFX.xsd"/>
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/common/v1" schemaLocation="../domain/platformCommon.xsd"/>
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/account/v1" schemaLocation="../domain/platformAccount.xsd"/>
+	<xsd:complexType name="GetRateQuote">
+		<xsd:annotation>
+			<xsd:documentation>Provides a reference to the FX Get Rate Quote request.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="getRateBatch" type="tns:GetRateBatch"/>
+			<xsd:element name="getRateQuoteItem" type="tns:GetRateQuoteItem" minOccurs="1" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="GetRateQuoteItem">
+		<xsd:annotation>
+			<xsd:documentation>Contains information about the Quote.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="forExQuoteType" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Identifies the type of FX Quote pricing strategy that is submitted as part of the request.  Valid values: FX Trade, Two-Way, Multi-Trade, Swap Near Leg, Offset, FX Option, FX Future, Time Deposit, Drawdown, FX Net Trade.  Default is FX Trade.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="forExRateType" type="btfx:ForExRateType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The requested rate type.  Valid Values: Live, Daily, Weekend, Indicative.  Default is Live.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="tNum" type="xsd:string" minOccurs="1">
+			<xsd:annotation>
+					<xsd:documentation>Transaction Number, which uniquely identifies a payment in WebSeries.  </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="baseCurrencyAmount" type="btamt:Amount" minOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation>The amount of the base currency.  </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="baseCurDecimalsNo" type="btamt:DecimalPlaces" minOccurs="0"/>
+			<xsd:element name="forExValueDateType" type="btfx:ForExValDtType">
+				<xsd:annotation>
+					<xsd:documentation>Value date type of the rate.  Valid Values: Cash, Tomorrow, Forward, Window.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="forExValDate" type="xsd:date" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Required if ForExValDtType Forward. Do not use in request if ForExValDtType Spot, Cash, Tomorrow, Window.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="tranDate" type="xsd:date" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The transaction date of the FX Deal.  When provided in the request this indicates the day on which the customer would like the FX Deal booked.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="debitAccount" type="btacct:AccountData" minOccurs="0"> 
+				<xsd:annotation>
+                        <xsd:documentation>Debit Account Number of the transaction</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="buySellIndicator" type="btfx:BuySellIndicator" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Requested Deal Type from the Customer's perspective.  Valid Values: Buy, Sell.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="typeInfo" type="btws:TypeInfo" minOccurs="0">
+				<xsd:annotation>
+                        <xsd:documentation>Attributes used to describe a transaction type</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ForExGetRateDeal">
+		<xsd:annotation>
+			<xsd:documentation>Contains information about the Deal.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="getRateBatch" type="tns:GetRateBatch">
+				<xsd:annotation>
+					<xsd:documentation>Get Rate Batch.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="forExQuote" type="tns:GetRateResponseQuoteInfo" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Contains information about the Quote.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="forExDealStatus" type="btfx:ForExDealStatus">
+				<xsd:annotation>
+					<xsd:documentation>Contains data describing the current status of the Deal.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="GetRateResponseQuoteInfo">
+		<xsd:annotation>
+			<xsd:documentation>Contains information about the Quote.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="tns:GetRateQuoteItem">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Is returned by the FX provider to indicate the timeframe this quote is valid for.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:sequence>
+					<xsd:element name="forExQuoteId" type="xsd:string" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Unique identifier of the Quote.  </xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="quoteExpirationTime" type="xsd:integer" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Is returned by the FX provider to indicate the time (in sec) this quote is valid for.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="requestedForExRate" type="btfx:ExchangeRate" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Will be returned in a quote inquiry response.  Indicates the ForEx rate applicable to the base/contra currency code pair.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="GetRateBatch">
+		<xsd:annotation>
+			<xsd:documentation>Contains information about the Get Rate Batch.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="fxIdentifier" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>FX Identifier</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="creditCurrency" type="btamt:CurrencyCode" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The credit currency code.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="debitCurrency" type="btamt:CurrencyCode" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The debit currency code.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="additionalInfo" type="btws:nameValuePairList" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>
+

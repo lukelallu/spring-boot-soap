@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema targetNamespace="http://www.bottomline.com/webseries/schema/is/message/wpffraudprevention/v1" xmlns:xsd="http://www.w3.org/2001/XMLSchema"  xmlns:tns="http://www.bottomline.com/webseries/schema/is/message/wpffraudprevention/v1" elementFormDefault="qualified" version="1.0">
+	<xsd:element name="preventionActionRequest" type="tns:PreventionActionRequest" nillable="true"/>
+	<xsd:element name="preventionActionResponse" type="tns:PreventionActionResponse" nillable="true"/>
+	<xsd:element name="preventionScoreRequest" type="tns:PreventionScoreRequest" nillable="true"/>
+	<xsd:element name="preventionScoreResponse" type="tns:PreventionScoreResponse" nillable="true"/>
+	
+	<xsd:complexType name="PreventionRequest">
+		<xsd:sequence>
+			<xsd:element name="requestID" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">paymentId and paymentType are packed into requestId in the short term allowing them to be optional below</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="paymentId" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="paymentType" type="xsd:string"  minOccurs="0"/>
+			<xsd:element name="failReason" type="xsd:string"/>
+			<xsd:element name="returnCode" type="tns:returnCode"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="PreventionScoreRequest">
+		<xsd:complexContent>
+			<xsd:extension base="tns:PreventionRequest">
+				<xsd:sequence>
+					<xsd:element name="evaluationScore" type="xsd:int"/>
+					<xsd:element name="evaluationStatus" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">0 - Allow, 202 - Block, 205 - Hold</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="evaluationStatusDescription" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	
+	<xsd:complexType name="PreventionScoreResponse">
+		<xsd:sequence>
+			<xsd:element name="requestId" type="xsd:string"/>
+			<xsd:element name="acknowledged" type="xsd:boolean"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="PaymentAsyncActionRequest">
+		<xsd:complexContent>
+			<xsd:extension base="tns:PreventionRequest">
+				<xsd:sequence>
+					<xsd:element name="evaluationStatus" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">202 - Block, 900 - Release Hold, 901 - Expired</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="evaluationStatusDescription" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	
+	<xsd:complexType name="PaymentAsyncActionResponse">
+		<xsd:sequence>
+			<xsd:element name="RequestID" type="xsd:string" />
+			<xsd:element name="ReturnCode" type="tns:returnCode" />
+			<xsd:element name="FailReason" type="xsd:string" minOccurs="0" />
+		</xsd:sequence>
+	</xsd:complexType>	
+	
+	<xsd:complexType name="PreventionActionRequest">
+		<xsd:sequence>
+			<xsd:element name="requestID" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">paymentId and paymentType are packed into requestId in the short term allowing them to be optional below</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="paymentId" type="xsd:string" minOccurs="0" />
+			<xsd:element name="paymentType" type="xsd:string"  minOccurs="0"/>
+			<xsd:element name="userName" type="xsd:string" />
+			<xsd:element name="tenantID" type="xsd:string" />
+			<xsd:element name="actionStatus" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en"> 202 - Block, 900 - Release Hold</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:simpleType name="returnCode">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="Success" />
+			<xsd:enumeration value="Fail" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:complexType name="PreventionActionResponse">
+		<xsd:sequence>
+			<xsd:element name="RequestID" type="xsd:string" />
+			<xsd:element name="ReturnCode" type="tns:returnCode" />
+			<xsd:element name="FailReason" type="xsd:string" minOccurs="0" />
+		</xsd:sequence>
+	</xsd:complexType>
+	
+</xsd:schema>

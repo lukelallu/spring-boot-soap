@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+xmlns:tns="http://www.bottomline.com/webseries/schema/ps/platform/ce/config/v1"
+targetNamespace="http://www.bottomline.com/webseries/schema/ps/platform/ce/config/v1"
+elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xsd:element name="productConfig" type="tns:ProductConfig" />
+	<xsd:complexType name="ActionConfig">
+		<xsd:annotation>
+			<xsd:documentation>Configuration for action</xsd:documentation>
+		</xsd:annotation>
+			<xsd:sequence>
+			<xsd:element name="mode" type="xsd:string" />
+			<xsd:element name="description" type="xsd:string" />
+			<xsd:element name="entitle" type="xsd:integer" default="1"/>
+			<xsd:element name="restrictionSet" type="xsd:integer" default="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="TypeConfig">
+		<xsd:annotation>
+			<xsd:documentation>Configuration for type</xsd:documentation>
+		</xsd:annotation>
+			<xsd:sequence>
+			<xsd:element name="code" type="xsd:string" />
+			<xsd:element name="description" type="xsd:string" />
+			<xsd:element name="entitled" type="xsd:boolean" default="false"/>
+			<xsd:element name="tooltip" type="xsd:string" minOccurs="0" />
+			<xsd:element name="actions" type="tns:ActionConfig" minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+</xsd:complexType>
+	<xsd:complexType name="EntryMethodConfig">
+		<xsd:annotation>
+			<xsd:documentation>Configuration for entry method</xsd:documentation>
+		</xsd:annotation>
+	</xsd:complexType>
+	<xsd:complexType name="FunctionConfig">
+		<xsd:annotation>
+			<xsd:documentation>Configuration for function</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="code" type="xsd:string" />
+			<xsd:element name="description" type="xsd:string" />
+			<xsd:element name="hasProfiles" type="xsd:boolean" default="false"/>
+			<xsd:element name="types" type="tns:TypeConfig" minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ProductConfig">
+		<xsd:annotation>
+			<xsd:documentation>Configuration for function</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="code" type="xsd:string" />
+			<xsd:element name="description" type="xsd:string" />
+			<xsd:element name="functions" type="tns:FunctionConfig" minOccurs="0" maxOccurs="unbounded" />
+			<xsd:element name="clientResources" type="tns:AppResourceConfig" minOccurs="0" maxOccurs="unbounded" />
+			<xsd:element name="adminResources" type="tns:AppResourceConfig" minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="AppResourceConfig">
+		<xsd:annotation>
+			<xsd:documentation>Configuration for function</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="code" type="xsd:string" />
+			<xsd:element name="locale" type="xsd:string" />
+			<xsd:element name="message" type="xsd:string" />
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+		xmlns:btws="http://www.bottomline.com/webseries/schema/ps/platform/common/v1"
+		xmlns:btmsg="http://www.bottomline.com/webseries/schema/ps/message/common/v1"
+		xmlns:tns="http://www.bottomline.com/webseries/schema/is/message/userselfservice/v1"
+		targetNamespace="http://www.bottomline.com/webseries/schema/is/message/userselfservice/v1"
+		elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/common/v1" schemaLocation="../domain/platformCommon.xsd" />
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/message/common/v1" schemaLocation="platformMessage.xsd" />
+
+	<xsd:annotation>
+		<xsd:documentation xml:lang="en"> Request/response messages for WebSeries user self serivce.</xsd:documentation>
+	</xsd:annotation>
+	<xsd:element name="changeUserSettingsRequest" type="tns:ChangeUserSettingsRequest" nillable="true" />
+	<xsd:element name="changeUserSettingsResponse" type="tns:ChangeUserSettingsResponse" nillable="true" />
+	<xsd:element name="changePasswordRequest" type="tns:ChangePasswordRequest"></xsd:element>
+	<xsd:element name="changePasswordResponse" type="tns:ChangePasswordResponse"></xsd:element>
+
+	<xsd:complexType name="ChangeUserSettingsRequest">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">Allows user to change some settings directly without administrative approval. User is identified based on user data in standard request header.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="requestHeader" type="btmsg:RequestHeader" nillable="false">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">WebSeries standard request fields</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="userName" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>User's full name</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="emailAddress" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>User's email address</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="locale" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>User's locale</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="timeZoneId" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>User's timezone</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="settings" type="btws:Setting" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">List of group level settings. Each setting is a name/value pair.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ChangeUserSettingsResponse">
+		<xsd:sequence>
+			<xsd:element name="responseHeader" type="btmsg:ResponseHeader">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">WebSeries standard response fields</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ChangePasswordRequest">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">Changes the password for the current User</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="requestHeader" type="btmsg:RequestHeader" nillable="false">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">WebSeries standard request fields</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="oldPassword" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Current Password.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="newPassword" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>New Password.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ChangePasswordResponse">
+		<xsd:sequence>
+			<xsd:element name="responseHeader" type="btmsg:ResponseHeader">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">WebSeries standard response fields</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="SaveOTPDestinationsRequest">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">Update the set of one time passcode contact destinations for the user</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="destinations" type="tns:OTPDestination" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>The set of destinations</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="SaveOTPDestinationsResponse">
+		<xsd:sequence>
+			<xsd:element name="responseHeader" type="btmsg:ResponseHeader">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Digital Banking standard response fields</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="challengedAction" type="btws:ActionData" minOccurs="0" />
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="OTPDestination">
+		<xsd:sequence>
+			<xsd:element name="channel" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">The channel for the contact destination.  May be sms, voice, or email.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="address" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">The phone number or email address for this contact destination</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="default" type="xsd:boolean">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Indicates if this is the default contact destination for the user</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

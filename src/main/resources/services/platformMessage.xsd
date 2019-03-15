@@ -1,0 +1,535 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+	xmlns:btws="http://www.bottomline.com/webseries/schema/ps/platform/common/v1"
+	xmlns:btauth="http://www.bottomline.com/webseries/schema/ps/platform/authentication/v1" 
+	xmlns:btsearch="http://www.bottomline.com/webseries/schema/ps/platform/search/v1" 
+	xmlns:btinqmsg="http://www.bottomline.com/webseries/schema/ps/message/inquiry/v1" 
+	xmlns:btmsg="http://www.bottomline.com/webseries/schema/ps/message/common/v1" 
+	xmlns:btinq="http://www.bottomline.com/webseries/schema/ps/platform/inquiry/v1" 
+	xmlns:tns="http://www.bottomline.com/webseries/schema/ps/message/common/v1"
+	xmlns:btfilter="http://www.bottomline.com/webseries/schema/ps/platform/filter/v1" 
+	targetNamespace="http://www.bottomline.com/webseries/schema/ps/message/common/v1" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/authentication/v1" schemaLocation="../domain/platformAuthentication.xsd"/>
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/common/v1" schemaLocation="../domain/platformCommon.xsd"/>
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/search/v1" schemaLocation="../domain/platformSearch.xsd"/>
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/message/inquiry/v1" schemaLocation="platformInquiry.xsd"/>
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/inquiry/v1" schemaLocation="../domain/platformInquiry.xsd"/>
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/filter/v1" schemaLocation="../domain/platformFilter.xsd"/>
+	<xsd:complexType name="Warning">
+		<xsd:sequence>
+			<xsd:element name="type" type="xsd:int">
+				<xsd:annotation>
+					<xsd:documentation>Warning type: 0 = soft, 1 = hard. Soft warnings are informational only. Hard warning require resubmittal.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="code" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>Language neutral code representing warning</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="message" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>Language specific (localized) message describing warning</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ActionResponse">
+		<xsd:sequence>
+			<xsd:element name="result" type="xsd:boolean">
+				<xsd:annotation>
+					<xsd:documentation>True if the action was successful otherwise false</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="errorCode" type="xsd:int">
+				<xsd:annotation>
+					<xsd:documentation>A error code to provide more context if result is false</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="message" type="xsd:string" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>A descriptive message</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="confirms" type="btws:ConfirmData" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Confirmation information such as field property values</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="resultType" type="xsd:string" minOccurs="0" />
+			<xsd:element name="challengedAction" type="btws:ActionData" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Identifies the action the user was performing that caused the initial MFA challenge</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ListRequest">
+		<xsd:sequence>
+			<xsd:element name="offset" type="xsd:int" default="1" />
+			<xsd:element name="pagesize" type="xsd:int" default="0" />
+			<xsd:element name="searchFields" type="btsearch:SearchField" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="sortFields" type="btsearch:SortField" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ListViewRequest">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">A request to retrieve records for a list view.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="startRow" type="xsd:int" default="1">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">The starting row index to retrieve results from. Note the starting index is one.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="rowsPerPage" type="xsd:int" default="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">The number of rows to retrieve for each page requested</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="searchFields" type="btsearch:SearchField" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Search criteria to restrict the results.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="sortFields" type="btsearch:SortField" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Sort criteria to order the results.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="viewId" type="xsd:integer" nillable="true">			
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">View identifier.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="requestParameters" type="btws:nameValuePairList" nillable="true">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">List of request parameters.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="dataOnly" type="xsd:int" default="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Flag to indicate if only the row data is to be retrieved</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="InquiryListViewRequest">
+		<xsd:complexContent>
+			<xsd:extension base="tns:ListViewRequest">
+				<xsd:sequence>
+					<xsd:element name="depends" type="btws:nameValuePair" minOccurs="0" maxOccurs="unbounded"></xsd:element>
+					<xsd:element name="fieldName" type="xsd:string"/>
+					<xsd:element name="productCode" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="functionCode" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="typeCode" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="action" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="entryMethod" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="subType" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="entryClass" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="searchOrOperator" type="xsd:boolean" default="false">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">This is set to true if filter that is constructed from Search Fields is to use OR operator.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	
+	<xsd:complexType name="ChildListViewRequest">
+		<xsd:sequence>
+			<xsd:element name="startRow" type="xsd:int" default="1" />
+			<xsd:element name="rowsPerPage" type="xsd:int" default="0" />
+			<xsd:element name="searchFields" type="btsearch:SearchField" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="sortFields" type="btsearch:SortField" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="keyFields" type="btws:nameValuePair" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="action" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="entryMethod" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="subType" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="entryClass" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>
+						Entry Class is used to identify correct grid for the Nacha file import payments.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ListViewResponse">
+		<xsd:annotation>
+			<xsd:documentation>Response for the listview with context for the whole list view as well as context for individual rows</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="context" type="btws:ServiceClientContext">
+				<xsd:annotation>
+					<xsd:documentation>Additional context information around the request e.g. action data / key fields</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="respHeader" type="btmsg:ResponseHeader">
+				<xsd:annotation>
+					<xsd:documentation>Common response data</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="rowHeader" type="btinq:ColumnHeaderData" nillable="true" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Schema column information for each row returned such as data types and maximum lengths</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="rows" type="btinq:RowDataWithCxt" nillable="true" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Rows including context information</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="responseParameters" type="btws:nameValuePairList" nillable="true">
+<!-- 				<xsd:annotation>
+					<xsd:documentation>TODO This is rarely used and most often set to NULL or empty. InquiryService seems to use this from the look up processor but even this doesn't appear to use. If not used perhaps it can be removed?</xsd:documentation>
+				</xsd:annotation>
+ -->			</xsd:element>
+			<xsd:element name="totalRows" type="xsd:int" default="0">
+				<xsd:annotation>
+					<xsd:documentation>The total number of rows available</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="totalPages" type="xsd:int" default="0">
+				<xsd:annotation>
+					<xsd:documentation>The total number of pages available</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="viewId" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The corresponding VIEWID to the SYSLISTVIEWS</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="viewOwner" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The user identifier who owns the view or _SYSTEM if it's application defined</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="filterFields" type="btfilter:FilterField" nillable="true" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>A list of fields which can be filtered which includes data type information and also whether the fields are sortable</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="lastRefreshTimestamp" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>A timestamp of when the last data was sent to the client</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="detailReportId" type="xsd:int" default="0" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The detail report Id for the list view</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ChildListViewResponse">
+		<xsd:annotation>
+			<xsd:documentation>Response for the listview with context for the whole list view as well as context for individual rows</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="context" type="btws:ServiceClientContext"/>
+			<xsd:element name="respHeader" type="btmsg:ResponseHeader"/>
+			<xsd:element name="rowHeader" type="btinq:ColumnHeaderData" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="rows" type="btinq:RowDataWithCxt" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="responseParameters" type="btws:nameValuePairList" nillable="true"/>
+			<xsd:element name="totalRows" type="xsd:int" default="0"/>
+			<xsd:element name="totalPages" type="xsd:int" default="0"/>
+			<xsd:element name="nextSeqNum" type="xsd:int" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="LookupListViewResponse">
+		<xsd:annotation>
+			<xsd:documentation>Response for the listview with context for the whole list view as well as context for individual rows</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="respHeader" type="btmsg:ResponseHeader"/>
+			<xsd:element name="rowHeader" type="btinq:ColumnHeaderData" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="rows" type="btinq:RowDataWithMapData" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="responseParameters" type="btws:nameValuePairList" nillable="true"/>
+			<xsd:element name="totalRows" type="xsd:int" default="0"/>
+			<xsd:element name="totalPages" type="xsd:int" default="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="MessageWithContext">
+		<xsd:annotation>
+			<xsd:documentation>Error message with additional context if available such as an error code</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="message" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>A generic message</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="errorCode" type="xsd:integer">
+				<xsd:annotation>
+					<xsd:documentation>An error code</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ResponseHeader">
+		<xsd:annotation>
+			<xsd:documentation>Standard response generic values for some service operations</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="requestId" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>Identifier from the original service request</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="result" type="xsd:boolean">
+				<xsd:annotation>
+					<xsd:documentation>Determines whether the call was successful</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="message" type="xsd:string" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>A generic message</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="messageWithContext" type="tns:MessageWithContext" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>A generic message with context including an optional error code if available.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="errorCode" type="xsd:integer">
+				<xsd:annotation>
+					<xsd:documentation>An error code</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="additionalData" type="btws:nameValuePair" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Optional field for any additional Information to be communicated</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>	
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ResponseHeaderMulti">
+		<xsd:complexContent>
+			<xsd:extension base="tns:ResponseHeader">
+				<xsd:sequence>
+					<xsd:element name="queryOffset" type="xsd:int"/>
+					<xsd:element name="queryPagesize" type="xsd:int"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="ResponseHeaderMultiItem">
+		<xsd:annotation>
+			<xsd:documentation>Response message for multiple items</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="respHeader" type="tns:ResponseHeader"/>
+			<xsd:element name="itemResponseHeader" type="tns:ItemResponseHeader" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>The response for each requested item</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ItemResponseHeader">
+		<xsd:annotation>
+			<xsd:documentation>Response header for an item in a group of actions.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="tns:ResponseHeader">
+				<xsd:sequence>
+					<xsd:element name="itemId" type="xsd:string"/>
+					<xsd:element name="rowIdentifier" type="btws:RowIdentifier" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="ItemResponseWithWarnings">
+		<xsd:annotation>
+			<xsd:documentation>Response header for an item in a group of actions that may include warnings.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="tns:ItemResponseHeader">
+				<xsd:sequence>
+					<xsd:element name="warning" type="tns:Warning" minOccurs="0" maxOccurs="unbounded">
+						<xsd:annotation>
+							<xsd:documentation>Response header for an item in a group of actions that may include warnings.	</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="ResponseHeaderMultiItemWithWarnings">
+		<xsd:annotation>
+			<xsd:documentation>Response header for group of items that have been acted on</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="tns:ResponseHeader">
+				<xsd:sequence>
+					<xsd:element name="itemResponse" type="tns:ItemResponseWithWarnings" maxOccurs="unbounded">
+						<xsd:annotation>
+							<xsd:documentation>
+								Response header for an item in a group of actions that may include warnings.
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="RequestHeader">
+		<xsd:annotation>
+			<xsd:documentation>Standard request header</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="requestId" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>Arbitary identifier passed in the request for tracking purposes</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="requestUser" type="btauth:userData" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>User performing the request.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="channelId" type="xsd:string" minOccurs="0">
+<!-- TODO Better description? What is this usually used for / examples?
+ -->				<xsd:annotation>
+					<xsd:documentation>Channel identifier.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="routingContext" type="xsd:string" minOccurs="0">
+<!-- 				<xsd:annotation>
+					<xsd:documentation>TODO </xsd:documentation>
+				</xsd:annotation>
+ -->			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="RequestHeaderMulti">
+		<xsd:complexContent>
+			<xsd:extension base="tns:RequestHeader">
+				<xsd:sequence>
+					<xsd:element name="queryOffset" type="xsd:int">
+						<xsd:annotation>
+							<xsd:documentation>Record offset into a set of records if the request supports paging</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="queryPagesize" type="xsd:int">
+						<xsd:annotation>
+							<xsd:documentation>The number of records for each page to retrieve</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="GetModelInfoRequest">
+		<xsd:sequence>
+			<xsd:element name="entryMethod" type="xsd:int" default="0">
+				<xsd:annotation>
+					<xsd:documentation>Entry method used by getModelInfo of rest tableMaint service to set the protected field in the returned model.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="entryClass" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Entry Class is used by getModelInfo of rest tableMaint service to resolve the child type for the Nacha File Import Payments.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="productCode" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Product Code. Valid values are represented in the Products table based on the allowed function codes.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>			
+			<xsd:element name="functionCode" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Function Code that can be any of INST, TMPL, BATCH, BHTMPL, MAINT.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>			
+			<xsd:element name="typeCode" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Type Code.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>			
+			<xsd:element name="action" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Action mode.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>			
+			<xsd:element name="subtype" type="xsd:string" minOccurs="0" default="*">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Sub type.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>			
+			<xsd:element name="data" type="btws:nameValuePair" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">List of Data - List of NameValuePairLists</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>			
+		</xsd:sequence>
+	</xsd:complexType>	
+	<xsd:complexType name="PaymentAuditHistoryRequest">
+		<xsd:annotation>
+			<xsd:documentation>Payment Audit History Request</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="tNum" type="xsd:string"/>
+			<xsd:element name="functionCode" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="PaymentAuditHistoryResponse">
+		<xsd:annotation>
+			<xsd:documentation>Payment Audit History Response</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="paymentAuditHistory" type="tns:PayAuditHistory" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>	
+	
+	<xsd:complexType name="PayAuditHistory">
+		<xsd:annotation>
+			<xsd:documentation>Defines AuditHistory data object </xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="action" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>Defines the action whether INSERT/MODIFY/APPROVE</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="changedTs" type="xsd:string">
+				<xsd:annotation>
+					
+					<xsd:documentation>Stores timestamp for the data change</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="companyId" type="xsd:string">
+				<xsd:annotation>
+					
+					<xsd:documentation>Defines usergroup for the user</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="userId" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>User id </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="userName" type="xsd:string">
+				<xsd:annotation>
+					
+					<xsd:documentation>user name</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="change" type="xsd:string">
+				<xsd:annotation>
+					
+					<xsd:documentation>Represents data change like old value and new value</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="beneficiary" type="xsd:string">
+				<xsd:annotation>
+					
+					<xsd:documentation>String representation of the beneficiary</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+		</xsd:complexType>	
+</xsd:schema>

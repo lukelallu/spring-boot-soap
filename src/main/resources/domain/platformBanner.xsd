@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:btbanner="http://www.bottomline.com/webseries/schema/ps/platform/banner/v1" targetNamespace="http://www.bottomline.com/webseries/schema/ps/platform/banner/v1" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+	<xsd:complexType name="MessageModel">
+		<xsd:sequence>
+			<xsd:element name="messageType" type="xsd:string"/>
+			<xsd:element name="messageSubject" type="xsd:string"/>
+			<xsd:element name="messageText" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

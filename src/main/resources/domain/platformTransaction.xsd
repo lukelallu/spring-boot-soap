@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" xmlns:btws="http://www.bottomline.com/webseries/schema/ps/platform/common/v1" xmlns:btamt="http://www.bottomline.com/webseries/schema/ps/platform/amount/v1" xmlns:tns="http://www.bottomline.com/webseries/schema/ps/platform/transaction/v1" xmlns:btacct="http://www.bottomline.com/webseries/schema/ps/platform/account/v1" xmlns:btbank="http://www.bottomline.com/webseries/schema/ps/platform/bank/v1" targetNamespace="http://www.bottomline.com/webseries/schema/ps/platform/transaction/v1" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+	<xsd:annotation>
+		<xsd:documentation xml:lang="en"> Standard models for transaction data. Part of BTR standard product.</xsd:documentation>
+	</xsd:annotation>
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/account/v1" schemaLocation="platformAccount.xsd"/>
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/amount/v1" schemaLocation="platformAmount.xsd"/>
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/bank/v1" schemaLocation="platformBank.xsd"/>
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/common/v1" schemaLocation="platformCommon.xsd"/>
+	<xsd:simpleType name="DebitCreditIndicator">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">Debit/credit Indicator values </xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="CR"/>
+			<xsd:enumeration value="DR"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="PostedFlag">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">Posted flag - P=Posted transaction, I=Intra-day</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="P"/>
+			<xsd:enumeration value="I"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="TransactionDataSimple">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">Basic transaction data structure. Representation of data stored in WebSeries GIR Transaction Database.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="transactionId" type="tns:TransactionIdentifier" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Unique Transaction Identifier for this transaction</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="postDate" type="xsd:date" >
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Post date of the transaction </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="valueDate" type="xsd:date" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Value date of the transaction </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="amount" type="btamt:Amount" >
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Transaction amount. Could be debit or credit depending on indicator</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="debitCreditIndicator" type="tns:DebitCreditIndicator" >
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">DR or CR to indicate debit or credit</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="postedFlag" type="tns:PostedFlag" >
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Indicates whether the transaction is posted or intra-day</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="currencyCode" type="btamt:CurrencyCode" >
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">3 letter currency code</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="bankReference" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Bank reference (Issuing reference)</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="customerReference" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Customer reference (Ordering reference)</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="transactionDetail" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Payment Detail of the Transaction</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="SWIFTTypeCode" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">SWIFT Type Code</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="BAITypeCode" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">BAI Type Code</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="BAIGroupCode" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">BAI Group Code</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="SWIFTTypeDescription" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">SWIFT Type Description</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="BAITypeDescrption" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">BAI Type Description</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="timestamp" type="xsd:dateTime" >
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Hub timestamp indicating date and time of receipt of transaction information by WebSeries</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="TransactionData">
+		<xsd:complexContent>
+			<xsd:annotation>
+				<xsd:documentation xml:lang="en">Transaction data with bank and account information. (Used on mobile service.) </xsd:documentation>
+			</xsd:annotation>
+			<xsd:extension base="tns:TransactionDataSimple">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Transaction data without bank and account information</xsd:documentation>
+				</xsd:annotation>
+                <xsd:sequence>
+        			<xsd:element name="account" type="btacct:AccountData">
+        				<xsd:annotation>
+        					<xsd:documentation xml:lang="en"> Standard account information including account number and bank code</xsd:documentation>
+        				</xsd:annotation>
+        			</xsd:element>
+        			<xsd:element name="bankId" type="btbank:BankIdentifier">
+        				<xsd:annotation>
+        					<xsd:documentation xml:lang="en">Bank Id stored with transaction in reporting tables. Depending on source of reporting data could be ABA (source is BAI) , BIC (source is MT9xx), etc.</xsd:documentation>
+        				</xsd:annotation>
+        			</xsd:element>
+        			<xsd:element name="bankName" type="xsd:string">
+        				<xsd:annotation>
+        					<xsd:documentation xml:lang="en">Bank name</xsd:documentation>
+        				</xsd:annotation>
+        			</xsd:element>
+    		   </xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="TransactionDataExtended">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">Extended transaction data structure.Includes swift advices data.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="tns:TransactionDataSimple">
+				<xsd:sequence>
+					<xsd:element name="bankToBankInformation" type="xsd:string" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">Bank To Bank Information</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="intermediaryBankData" type="btbank:BankDataFull" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">Intermediary Bank Details</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					
+					<xsd:element name="adviceData" type="tns:AdviceData" minOccurs="0" maxOccurs="1">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">Advice Data</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="TransactionIdentifier">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">Transaction identifier, used to uniquely identify this transaction.  This structure will also be used to support delta transaction requests.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="tranId" type="xsd:string"  minOccurs="1" maxOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Transaction unique information</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="validDate" type="xsd:date" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Date for which the transaction identifier is unique</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	
+	<xsd:complexType name="AdviceData">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">Block to support advice data for bai transactions</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="adviceReference" type="xsd:string"  minOccurs="1" maxOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Advice Reference Number</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="adviceDataItem" type="btws:Setting" minOccurs="0"  maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Advice Items</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

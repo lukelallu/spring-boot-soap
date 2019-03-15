@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+	xmlns:btgview="http://www.bottomline.com/webseries/schema/ps/platform/gridview/v1" 
+	xmlns:btsearch="http://www.bottomline.com/webseries/schema/ps/platform/search/v1" 
+	targetNamespace="http://www.bottomline.com/webseries/schema/ps/platform/gridview/v1"
+	elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/search/v1" schemaLocation="platformSearch.xsd"/>
+	<xsd:complexType name="GridViewColumn">
+		<xsd:sequence>
+			<xsd:element name="name" type="xsd:string"/>
+			<xsd:element name="field" type="xsd:string"/>
+			<xsd:element name="order" type="xsd:integer" nillable="true"/>
+			<xsd:element name="width" type="xsd:integer" nillable="true"/>
+			<xsd:element name="hidden" type="xsd:boolean" nillable="true"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="GridViewListItem">
+		<xsd:sequence>
+			<xsd:element name="name" type="xsd:string"/>
+			<xsd:element name="viewId" type="xsd:integer" nillable="true"/>
+			<xsd:element name="displayOrder" type="xsd:integer" nillable="true"/>
+			<xsd:element name="defaultView" type="xsd:boolean" nillable="true"/>
+			<xsd:element name="systemView" type="xsd:boolean" nillable="true"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="GridViewList">
+		<xsd:sequence>
+			<xsd:element name="gridViewListItems" type="btgview:GridViewListItem" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="GridView">
+		<xsd:sequence>
+			<xsd:element name="name" type="xsd:string"/>
+			<xsd:element name="viewId" type="xsd:integer" nillable="true"/>			
+			<xsd:element name="viewType" type="xsd:string"/>
+			<xsd:element name="sortColumn" type="xsd:string"/>
+			<xsd:element name="sortDir" type="xsd:string"/>
+			<xsd:element name="gridViewColumns" type="btgview:GridViewColumn" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="searchFields" type="btsearch:SearchField" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2010 rel. 2 (x64) (http://www.altova.com) by Bottomline Technologies (Bottomline Technologies) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:btut="http://www.bottomline.com/webseries/schema/ps/tmaint/user/v1"  targetNamespace="http://www.bottomline.com/webseries/schema/ps/tmaint/user/v1" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+	<!--Based on BTWS 7.0-->
+	<!--Last Updated 1/21/2011-->
+	<!-- CIBC related artifacts will be removed/refactored in a future release. DGB JIRA# - NH-38056  -->
+	<xs:complexType name="ClientUserRoleType">
+		<xs:annotation>
+			<xs:documentation>Functional or Data Role code</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="RoleID">
+				<xs:annotation>
+					<xs:documentation>Key value for the role</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="50"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="RoleType" type="xs:int">
+				<xs:annotation>
+					<xs:documentation>0=Functional Role
+1=Data Role</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Description" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Client entered description of the role</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="50"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ClientUserType">
+		<xs:annotation>
+			<xs:documentation>Client user settings including data and functional roles</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="User" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="UserGroup">
+							<xs:annotation>
+								<xs:documentation>Name of the usergroup that the user belongs to.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="8"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="UserID">
+							<xs:annotation>
+								<xs:documentation>User Id of the user in WebSeries</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="8"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="ParentuserGroup" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Name of the parent usergroup, as entered in the releated usergroup </xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="8"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="Password" minOccurs="0" maxOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="128"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="LanguageCode" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>language code</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="2"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="CountryCode" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>ISO country code domiclien of the user, for example CA, US, UK, etc</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="2"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="UserName" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Descriptive user name of the client</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="64"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="Status" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Status of the user in the system.  only approved users can access the system. Example values are PW, EN and AP</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="2"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="Strikes" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Number of invalid attempts to access the system.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:int">
+									<xs:totalDigits value="10"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="Administrator" type="xs:int" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>indicates if the user has access to administrative functions such as adding roles or modifing users</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="ApplicationUser" type="xs:int" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Indicates if the user has access to functional features as configured in function roles.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="ChangeDate" type="xs:dateTime" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Indicates the date the password expieres</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="SessionID" minOccurs="0" maxOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="32"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="ApprovedByTimeStamp" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Audit for the coresponding action.  Read-only.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:dateTime"/>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="ApprovedBy" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Audit for the coresponding action.  Read-only.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="8"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="EnteredByTimeStamp" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Audit for the coresponding action.  Read-only.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:dateTime"/>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="ModifiedBy" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Audit for the coresponding action.  Read-only.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="8"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="ModifiedByTimeStamp" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Audit for the coresponding action.  Read-only.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:dateTime"/>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="EnteredBy" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Audit for the coresponding action.  Read-only.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="8"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="EnteredByGroup" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Audit for the coresponding action.  Read-only.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="8"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="EnteredByGroupTimeStamp" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Audit for the coresponding action.  Read-only.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:dateTime"/>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="ModifiedByGroup" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Audit for the coresponding action.  Read-only.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="8"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="ModifiedByGroupTimeStamp" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Audit for the coresponding action.  Read-only.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:dateTime"/>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="ApprovedByGroup" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Audit for the coresponding action.  Read-only.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="8"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="ApprovedByGroupTimeStamp" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Audit for the coresponding action.  Read-only.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:dateTime"/>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="EmailAddress" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Information only</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="40"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="SuperUserInd" type="xs:int" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Indicates if the user auto approves administrative functions.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Locale" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Indicates the locale of the user.  Example values are fr_CA, en_CA or en_US</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="16"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="UgSuperUserInd" type="xs:int" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Indicates if the user auto approves administrative functions.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="ApproverType" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Used for Panel</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:pattern value="[A-F]"/>
+									<xs:enumeration value="[A-J]"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="UpdateCount__" minOccurs="0" maxOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Do not use</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:int">
+									<xs:totalDigits value="10"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="TimeZoneID" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Foreign Key.  Indicates the numeric timezone ID as specified in the BTWS timezone table</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="128"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="DisableUser" type="xs:int" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Indicates if the user is disabled or not.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="AccountView" type="xs:int" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>0 = Account in List View  1 = Account Name in List View</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="DataRole" type="btut:ClientUserRoleType" minOccurs="0"/>
+			<xs:element name="FunctionalRole" type="btut:ClientUserRoleType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="UserCIBC" type="btut:ClientUserCIBC" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="Action">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Add"/>
+					<xs:enumeration value="Modify"/>
+					<xs:enumeration value="Delete"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<!-- CIBC related artifacts will be removed/refactored in a future release. DGB JIRA# - NH-38056  -->
+	<xs:complexType name="ClientUserCIBC">
+		<xs:annotation>
+			<xs:documentation>Custom sibling to support CIBC User attributes</xs:documentation>
+		</xs:annotation>
+		<xs:all>
+			<xs:element name="ExternalID" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>16 Digit ID used to Map Authentication Context to BT User.  Globally unique accross all BT usergroups</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:minLength value="0"/>
+						<xs:maxLength value="16"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="InternalID" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Internal CIBC ID used to support internal audit during integration.  Use only for CBAO users.</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="32"/>
+						<xs:minLength value="0"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="TransitNumber" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Internal CIBC department for a user.  use only for CBAO users</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="8"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:all>
+	</xs:complexType>
+</xs:schema>

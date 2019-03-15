@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2014 rel. 2 sp1 (x64) (http://www.altova.com) by Bottomline Technologies (Bottomline Technologies) -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" xmlns:btws="http://www.bottomline.com/webseries/schema/ps/platform/common/v1" xmlns:btpay="http://www.bottomline.com/webseries/schema/ps/platform/payment/v1" xmlns:btach="http://www.bottomline.com/webseries/schema/ps/platform/payment/ach/v1" xmlns:btwire="http://www.bottomline.com/webseries/schema/ps/platform/payment/wire/v1" xmlns:btuser="http://www.bottomline.com/webseries/schema/ps/platform/user/v1" xmlns:btug="http://www.bottomline.com/webseries/schema/ps/platform/usergroup/v1" xmlns:btamt="http://www.bottomline.com/webseries/schema/ps/platform/amount/v1" xmlns:btacct="http://www.bottomline.com/webseries/schema/ps/platform/account/v1" xmlns:btbank="http://www.bottomline.com/webseries/schema/ps/platform/bank/v1" xmlns:bttrans="http://www.bottomline.com/webseries/schema/ps/platform/transaction/v1" xmlns:tns="http://www.bottomline.com/webseries/schema/ps/platform/loan/v1" targetNamespace="http://www.bottomline.com/webseries/schema/ps/platform/loan/v1" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0" jaxb:version="2.1">
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/common/v1" schemaLocation="platformCommon.xsd"/>
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/payment/v1" schemaLocation="platformPayment.xsd"/>
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/payment/wire/v1" schemaLocation="platformPaymentWire.xsd"/>
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/user/v1" schemaLocation="platformUser.xsd"/>
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/usergroup/v1" schemaLocation="platformUserGroup.xsd"/>
+    <xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/amount/v1" schemaLocation="platformAmount.xsd"/>
+    <xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/account/v1" schemaLocation="platformAccount.xsd"/>
+    <xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/bank/v1" schemaLocation="platformBank.xsd"/>
+    <xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/transaction/v1" schemaLocation="../domain/platformTransaction.xsd"/>
+	<xsd:complexType name="LoanPaymentInfo">
+		<xsd:sequence>
+			<xsd:element name="userData" type="btuser:User">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">User Data and associated Audit Data</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="userGroup" type="btug:UserGroup">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Details of the user group</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="wireDetails" type="btwire:WirePayment">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Generic Wire Payment. All fields used for various types included but made optional (minOccurs=0). Any wire type may be mapped into this generic form.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="customFields" type="btws:nameValuePair" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="LoanResponseItem">
+		<xsd:sequence>
+			<xsd:element name="paymentId" type="xsd:string"/>
+			<xsd:element name="paymentType" type="xsd:string"/>
+			<xsd:element name="resultCode" type="xsd:string"/>
+			<xsd:element name="resultDescription" type="xsd:string"/>
+			<xsd:element name="confirmationNumber" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="rejectMessage" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="customFields" type="btws:nameValuePair" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+    <xsd:complexType name="LoanBalanceDataExtended">
+        <xsd:annotation>
+            <xsd:documentation xml:lang="en">Extended current balance data structure.Includes name, value pairs to support additional balance types.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence minOccurs="0">
+            <xsd:element name="LoanBalanceData" type="tns:LoanBalanceData" minOccurs="0"/>
+            <xsd:element name="AdditionalBalanceTypes" type="btamt:nameAmountPairList" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="LoanBalanceData">
+        <xsd:annotation>
+            <xsd:documentation xml:lang="en">Basic balance data structure. This is extended for more specific use cases e.g. current or prior day</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="account" type="btacct:AccountData" nillable="false">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en"> Standard account information</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="statementDate" type="xsd:date" nillable="false">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en"> The as of date for the balances</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="bankId" type="btbank:BankIdentifier" nillable="false">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">Bank details for the source of balance information including name and codes (internal, BIC, ABA)</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="reportedTimestamp" type="xsd:dateTime" nillable="false">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">Timestamp indicating latest update to balance information</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="noteNumber" type="xsd:string"/>
+            <xsd:element name="collateralType" type="xsd:string"/>
+            <xsd:element name="loanTerm" type="xsd:string"/>
+            <xsd:element name="loanTermType" type="xsd:string"/>
+            <xsd:element name="interestRate" type="xsd:decimal"/>
+            <xsd:element name="paymentDueDate" type="xsd:date"/>
+            <xsd:element name="maturityDate" type="xsd:date"/>
+            <xsd:element name="originationDate" type="xsd:date"/>
+            <xsd:element name="nextPaymentDueDate" type="xsd:date"/>
+            <xsd:element name="principalBalance" type="btamt:Amount"/>
+            <xsd:element name="paymentDueAmount" type="btamt:Amount"/>
+            <xsd:element name="availableCommitmentAmount" type="btamt:Amount"/>
+            <xsd:element name="creditLimit" type="btamt:Amount"/>
+            <xsd:element name="paymentAmountPastDue" type="btamt:Amount"/>
+            <xsd:element name="principalAmountPastDue" type="btamt:Amount"/>
+            <xsd:element name="interestAmountPastDue" type="btamt:Amount"/>
+            <xsd:element name="escrowAmountPastDue" type="btamt:Amount"/>
+            <xsd:element name="otherAmountPastDue" type="btamt:Amount"/>
+            <xsd:element name="interestPaidYTD" type="btamt:Amount"/>
+            <xsd:element name="lastYearInterestPaid" type="btamt:Amount"/>
+            <xsd:element name="lateChargesDue" type="btamt:Amount"/>
+            <xsd:element name="lastPaymentAmount" type="btamt:Amount"/>
+            <xsd:element name="lastPaymentAmountToPrincipal" type="btamt:Amount"/>
+            <xsd:element name="lastPaymentAmountToInterest" type="btamt:Amount"/>
+            <xsd:element name="lastPaymentAmountToEscrow" type="btamt:Amount"/>
+            <xsd:element name="lastPaymentAmountToOther" type="btamt:Amount"/>
+            <xsd:element name="nextPaymentAmount" type="btamt:Amount"/>
+            <xsd:element name="totalLoanAmount" type="btamt:Amount"/>
+            <xsd:element name="loanDisbursement" type="btamt:Amount"/>
+            <xsd:element name="outstandingBalance" type="btamt:Amount"/>
+        </xsd:sequence>
+    </xsd:complexType>
+        <xsd:complexType name="LoanTransactionDataSimple">
+        <xsd:annotation>
+            <xsd:documentation xml:lang="en">Basic transaction data structure. Representation of data stored in WebSeries GIR Transaction Database.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="transactionId" type="bttrans:TransactionIdentifier" minOccurs="0">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">Unique Transaction Identifier for this transaction</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="postDate" type="xsd:date" >
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">Post date of the transaction </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="valueDate" type="xsd:date" minOccurs="0">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">Value date of the transaction </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="amount" type="btamt:Amount" >
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">Transaction amount. Could be debit or credit depending on indicator</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="debitCreditIndicator" type="bttrans:DebitCreditIndicator" >
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">DR or CR to indicate debit or credit</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="postedFlag" type="bttrans:PostedFlag" >
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">Indicates whether the transaction is posted or intra-day</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="currencyCode" type="btamt:CurrencyCode" >
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">3 letter currency code</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="bankReference" type="xsd:string" minOccurs="0">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">Bank reference (Issuing reference)</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="customerReference" type="xsd:string" minOccurs="0">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">Customer reference (Ordering reference)</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="transactionDetail" type="xsd:string" minOccurs="0">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">Payment Detail of the Transaction</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="Descrption" type="xsd:string" minOccurs="0">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">Description</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="timestamp" type="xsd:dateTime" >
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">Hub timestamp indicating date and time of receipt of transaction information by WebSeries</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="transactionType" type="xsd:string"/>
+            <xsd:element name="checkNumber" type="xsd:unsignedLong"/>
+            <xsd:element name="principalAmount" type="btamt:Amount"/>
+            <xsd:element name="interestAmount" type="btamt:Amount"/>
+            <xsd:element name="otherAmount" type="btamt:Amount"/>
+            <xsd:element name="escrowAmount" type="btamt:Amount"/>
+            <xsd:element name="transactionFeeAmount" type="btamt:Amount" minOccurs="0"/>
+            <xsd:element name="runningBalance" type="btamt:Amount" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="LoanTransactionData">
+        <xsd:annotation>
+            <xsd:documentation xml:lang="en">Transaction data with bank and account information. (Used on mobile service.) </xsd:documentation>
+        </xsd:annotation>            
+        <xsd:sequence>
+            <xsd:element name="LoanTransactionDataSimple" type="tns:LoanTransactionDataSimple"></xsd:element>
+            <xsd:element name="account" type="btacct:AccountData">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en"> Standard account information including account number and bank code</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="bankId" type="btbank:BankIdentifier">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">Bank Id stored with transaction in reporting tables. Depending on source of reporting data could be ABA (source is BAI) , BIC (source is MT9xx), etc.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="bankName" type="xsd:string">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">Bank name</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+       </xsd:sequence>
+    </xsd:complexType>
+</xsd:schema>

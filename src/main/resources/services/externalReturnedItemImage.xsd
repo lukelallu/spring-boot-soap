@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.bottomline.com/webseries/schema/external/message/returneditem/v1"
+		xmlns:btws="http://www.bottomline.com/webseries/schema/ps/platform/common/v1"
+		xmlns:btmsg="http://www.bottomline.com/webseries/schema/ps/message/common/v1"
+		xmlns:bttran="http://www.bottomline.com/webseries/schema/ps/platform/transaction/v1"
+		xmlns:btcheck="http://www.bottomline.com/webseries/schema/ps/platform/checkmgmt/v1" 
+		xmlns:btret="http://www.bottomline.com/webseries/schema/ps/platform/returneditem/v1"
+		xmlns:btacct="http://www.bottomline.com/webseries/schema/ps/platform/account/v1" 
+		xmlns:btamt="http://www.bottomline.com/webseries/schema/ps/platform/amount/v1" 
+		targetNamespace="http://www.bottomline.com/webseries/schema/external/message/returneditem/v1"
+		elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/common/v1" schemaLocation="../domain/platformCommon.xsd"/>
+	<xsd:import
+	namespace="http://www.bottomline.com/webseries/schema/ps/message/common/v1"
+	schemaLocation="platformMessage.xsd" />
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/account/v1" schemaLocation="../domain/platformAccount.xsd"/>
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/amount/v1" schemaLocation="../domain/platformAmount.xsd"/>
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/transaction/v1" schemaLocation="../domain/platformTransaction.xsd"/>
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/returneditem/v1" schemaLocation="../domain/platformReturnedItem.xsd"/>
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/checkmgmt/v1" schemaLocation="../domain/platformCheckManagement.xsd"/>
+
+	<xsd:element name="getReturnedItemImageRequest" type="tns:GetReturnedItemImageRequest"/>
+	<xsd:element name="getReturnedItemImageResponse" type="tns:GetReturnedItemImageResponse"/>
+
+	<xsd:complexType name="GetReturnedItemImageRequest">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">Request to external system to supply image(s) for a specific returned item</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="requestHeader" type="btmsg:RequestHeader">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">WebSeries standard request fields</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="accountData" type="btacct:AccountDataExtended">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Details of the account</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="serialNumber" type="btcheck:SerialNumber">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Returned item serial number.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="includeBack" type="xsd:boolean" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Optional parameter asking for back of returned item image.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="amount" type="btamt:Amount" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Optional returned item amount.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="checkIssueDate" type="xsd:date" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Optional returned item issue date</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="payeeName" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Optional payee name</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="memo" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Optional memo data</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="documentImageNumber" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Document image number returned as part of a returned item inquiry that identifies the image (PIC_SEQUENCE_NUMBER)</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="additionalData" type="btws:nameValuePair" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="GetReturnedItemImageResponse">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">Response containing the returned item image.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="responseHeader" type="btmsg:ResponseHeader">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">WebSeries standard response fields</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="returnedItemImageData" type="btret:ReturnedItemImageData" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Returned item image data. May not be included if response code is "not found"</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

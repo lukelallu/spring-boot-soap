@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema targetNamespace="http://www.bottomline.com/webseries/schema/external/message/mfa/v1" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.bottomline.com/webseries/schema/external/message/mfa/v1" xmlns:btws="http://www.bottomline.com/webseries/schema/ps/platform/common/v1" xmlns:btmsg="http://www.bottomline.com/webseries/schema/ps/message/common/v1" xmlns:btmfa="http://www.bottomline.com/webseries/schema/ps/message/mfa/v1" xmlns:btuser="http://www.bottomline.com/webseries/schema/ps/platform/user/v1" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/common/v1" schemaLocation="../domain/platformCommon.xsd"/>
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/user/v1" schemaLocation="../domain/platformUser.xsd"/>
+    <xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/message/common/v1" schemaLocation="platformMessage.xsd"/>
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/message/mfa/v1" schemaLocation="platformMFA.xsd"/>
+	<xsd:element name="initiateOutOfBandServerRequest" type="tns:InitiateOutOfBandServerRequest" nillable="true"/>
+	<xsd:element name="initiateOutOfBandServerResponse" type="tns:InitiateOutOfBandServerResponse" nillable="true"/>
+	<xsd:element name="validateMFAServerRequest" type="tns:ValidateMFAServerRequest" nillable="true"/>
+	<xsd:element name="validateMFAServerResponse" type="tns:ValidateMFAServerResponse" nillable="true"/>
+	<xsd:element name="getSettingsServerRequest" type="tns:GetSettingsServerRequest" nillable="true"/>
+	<xsd:element name="getSettingsServerResponse" type="tns:GetSettingsServerResponse" nillable="true"/>
+    <xsd:element name="performMFAPreCheckServerRequest" type="tns:PerformMFAPreCheckServerRequest" nillable="true"/>
+    <xsd:element name="performMFAPreCheckServerResponse" type="tns:PerformMFAPreCheckServerResponse" nillable="true"/>
+    <xsd:element name="tokenActivationServerRequest" type="tns:TokenActivationServerRequest" nillable="true"/>
+    <xsd:element name="tokenActivationServerResponse" type="tns:TokenActivationServerResponse" nillable="true"/>
+    <xsd:element name="getTokenRegistrationCodeServerRequest" type="tns:GetTokenRegistrationCodeServerRequest" nillable="true"/>
+    <xsd:element name="getTokenRegistrationCodeServerResponse" type="tns:GetTokenRegistrationCodeServerResponse" nillable="true"/>
+    <xsd:element name="updatePinServerRequest" type="tns:UpdatePinServerRequest" nillable="true"/>
+    <xsd:element name="updatePinServerResponse" type="tns:UpdatePinServerResponse" nillable="true"/>
+    <xsd:element name="createMFAUserServerRequest" type="tns:CreateMFAUserServerRequest" nillable="true"/>
+    <xsd:element name="createMFAUserServerResponse" type="tns:CreateMFAUserServerResponse" nillable="true"/>
+    <xsd:element name="deleteMFAUserServerRequest" type="tns:DeleteMFAUserServerRequest" nillable="true"/>
+    <xsd:element name="deleteMFAUserServerResponse" type="tns:DeleteMFAUserServerResponse" nillable="true"/>
+    <xsd:complexType name="CreateMFAUserServerRequest">
+        <xsd:sequence>
+            <xsd:element name="requestHeader" type="btmsg:RequestHeader">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">Digital Banking standard request fields</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+           <xsd:element name="user" type="btuser:User" >
+              <xsd:annotation>
+                  <xsd:documentation xml:lang="en">Details of user to create including audit data</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+           <xsd:element name="groupId" type="xsd:string">
+              <xsd:annotation>
+                  <xsd:documentation xml:lang="en">MFA Group Id</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>  
+            <xsd:element name="tokenType" type="xsd:string"/>
+            <xsd:element name="customFields" type="btws:nameValuePair" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="tokenString" type="xsd:string" minOccurs="0"/>          
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="CreateMFAUserServerResponse">
+        <xsd:sequence>
+            <xsd:element name="responseHeader" type="btmsg:ResponseHeader">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">Digital Banking Standard response fields including boolean result and optionally error code and error messages</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="DeleteMFAUserServerRequest">
+        <xsd:sequence>
+            <xsd:element name="requestHeader" type="btmsg:RequestHeader">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">Digital Banking standard request fields</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+           <xsd:element name="user" type="btuser:User">
+              <xsd:annotation>
+                  <xsd:documentation xml:lang="en">Details of user to delete including audit data</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+           <xsd:element name="groupId" type="xsd:string">
+              <xsd:annotation>
+                  <xsd:documentation xml:lang="en">MFA Group Id</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>            
+            <xsd:element name="tokenType" type="xsd:string"/>
+            <xsd:element name="customFields" type="btws:nameValuePair" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="tokenString" type="xsd:string" minOccurs="0"/>          
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="DeleteMFAUserServerResponse">
+        <xsd:sequence>
+            <xsd:element name="responseHeader" type="btmsg:ResponseHeader">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">Digital Banking Standard response fields including boolean result and optionally error code and error messages</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+	<xsd:complexType name="InitiateOutOfBandServerRequest">
+		<xsd:sequence>
+			<xsd:element name="requestHeader" type="btmsg:RequestHeader">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Digital Banking standard request fields</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="mfaContext" type="tns:MFAContext">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">MFA Context Information</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+            <xsd:element name="mfaUser" type="btuser:User">
+              <xsd:annotation>
+                  <xsd:documentation xml:lang="en">MFA User Details</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="mfaGroupId" type="xsd:string">
+              <xsd:annotation>
+                  <xsd:documentation xml:lang="en">MFA Group Id</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>            
+			<xsd:element name="selection" type="xsd:string"/>
+			<xsd:element name="selectionType" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="InitiateOutOfBandServerResponse">
+		<xsd:sequence>
+			<xsd:element name="responseHeader" type="btmsg:ResponseHeader">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Digital Banking Standard response fields including boolean result and optionally error code and error messages</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="claimCheckId" type="xsd:string">			
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Claim check returned for use in validate operation</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="mfaContext" type="tns:MFAContext">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">MFA Context Information</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+    <xsd:complexType name="TokenActivationServerRequest">
+        <xsd:sequence>
+            <xsd:element name="requestHeader" type="btmsg:RequestHeader">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">WebSeries standard request fields</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="tokenType" type="xsd:string"/>
+            <xsd:element name="customFields" type="btws:nameValuePair" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="tokenString" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="activationCode" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="mfaUser" type="btuser:User">
+              <xsd:annotation>
+                  <xsd:documentation xml:lang="en">MFA User Details</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="mfaGroupId" type="xsd:string">
+              <xsd:annotation>
+                  <xsd:documentation xml:lang="en">MFA Group Id</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>            
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="TokenActivationServerResponse">
+        <xsd:sequence>
+            <xsd:element name="responseHeader" type="btmsg:ResponseHeader">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">Digital Banking Standard response fields including boolean result and optionally error code and error messages</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>    
+    <xsd:complexType name="UpdatePinServerRequest">
+        <xsd:sequence>
+            <xsd:element name="requestHeader" type="btmsg:RequestHeader">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">WebSeries standard request fields</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="tokenType" type="xsd:string"/>
+            <xsd:element name="customFields" type="btws:nameValuePair" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="tokenString" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="newPin" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="mfaUser" type="btuser:User">
+              <xsd:annotation>
+                  <xsd:documentation xml:lang="en">MFA User Details</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="mfaGroupId" type="xsd:string">
+              <xsd:annotation>
+                  <xsd:documentation xml:lang="en">MFA Group Id</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>            
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="UpdatePinServerResponse">
+        <xsd:sequence>
+            <xsd:element name="responseHeader" type="btmsg:ResponseHeader">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">Digital Banking Standard response fields including boolean result and optionally error code and error messages</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>    
+    <xsd:complexType name="GetTokenRegistrationCodeServerRequest">
+        <xsd:sequence>
+            <xsd:element name="requestHeader" type="btmsg:RequestHeader">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">WebSeries standard request fields</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="tokenType" type="xsd:string"/>
+            <xsd:element name="customFields" type="btws:nameValuePair" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="tokenString" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="mfaUser" type="btuser:User">
+              <xsd:annotation>
+                  <xsd:documentation xml:lang="en">MFA User Details</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="mfaGroupId" type="xsd:string">
+              <xsd:annotation>
+                  <xsd:documentation xml:lang="en">MFA Group Id</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>            
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="GetTokenRegistrationCodeServerResponse">
+        <xsd:sequence>
+            <xsd:element name="responseHeader" type="btmsg:ResponseHeader">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">Digital Banking Standard response fields including boolean result and optionally error code and error messages</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="registrationCode" type="xsd:string"/>
+            <xsd:element name="customParameters" type="btws:nameValuePairList" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Additional generic values for external systems to use if required</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>    
+    <xsd:complexType name="PerformMFAPreCheckServerRequest">
+        <xsd:sequence>
+            <xsd:element name="requestHeader" type="btmsg:RequestHeader">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">WebSeries standard request fields</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="mfaContext" type="tns:MFAContext">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">MFA Context Information</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="tokenString" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="mfaUser" type="btuser:User">
+              <xsd:annotation>
+                  <xsd:documentation xml:lang="en">MFA User Details</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="mfaGroupId" type="xsd:string">
+              <xsd:annotation>
+                  <xsd:documentation xml:lang="en">MFA Group Id</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>            
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="PerformMFAPreCheckServerResponse">
+        <xsd:sequence>
+            <xsd:element name="responseHeader" type="btmsg:ResponseHeader">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">Digital Banking Standard response fields including boolean result and optionally error code and error messages</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="mfaContext" type="tns:MFAContext">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">MFA Context Information</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="preCheckResult" type="btmfa:PreCheckResult"></xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>    
+   	<xsd:complexType name="ValidateMFAServerRequest">
+		<xsd:sequence>
+			<xsd:element name="requestHeader" type="btmsg:RequestHeader">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">WebSeries standard request fields</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="mfaContext" type="tns:MFAContext">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">MFA Context Information</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="oneTimePassword" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="tokenString" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="tokenPassCode" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="tokenPin" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="claimCheckId" type="xsd:string"  minOccurs="0"/>			
+            <xsd:element name="mfaUser" type="btuser:User">
+              <xsd:annotation>
+                  <xsd:documentation xml:lang="en">MFA User Details</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="mfaGroupId" type="xsd:string">
+              <xsd:annotation>
+                  <xsd:documentation xml:lang="en">MFA Group Id</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>            
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ValidateMFAServerResponse">
+		<xsd:sequence>
+			<xsd:element name="responseHeader" type="btmsg:ResponseHeader">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Digital Banking Standard response fields including boolean result and optionally error code and error messages</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="mfaContext" type="tns:MFAContext">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">MFA Context Information</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="GetSettingsServerRequest">
+		<xsd:sequence>
+			<xsd:element name="requestHeader" type="btmsg:RequestHeader">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">WebSeries standard request fields</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="mfaContext" type="tns:MFAContext">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">MFA Context Information</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="userIdentifier" type="xsd:string" minOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="GetSettingsServerResponse">
+		<xsd:sequence>
+			<xsd:element name="responseHeader" type="btmsg:ResponseHeader">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Digital Banking Standard response fields including boolean result and optionally error code and error messages</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="mfaContext" type="tns:MFAContext">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">MFA Context Information</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="contacts" type="btmfa:MFAContact" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="MFAContext">
+		<xsd:sequence>
+			<xsd:element name="messageId" type="xsd:string"/>
+			<xsd:element name="challengedAction" type="btws:ActionData"/>
+            <xsd:element name="challengedType" type="xsd:string"/>
+			<xsd:element name="customFields" type="btws:nameValuePair" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

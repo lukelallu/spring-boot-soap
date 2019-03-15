@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.bottomline.com/webseries/schema/external/message/payment/v1" targetNamespace="http://www.bottomline.com/webseries/schema/external/message/payment/v1" xmlns:pay="http://www.bottomline.com/webseries/schema/is/message/payment/v1"  elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+ 	<xsd:import namespace="http://www.bottomline.com/webseries/schema/is/message/payment/v1" schemaLocation="integrationPayment.xsd"/>
+	<xsd:element name="getPaymentsToActionRequestHook" type="tns:GetPaymentsToActionRequestHook" nillable="true"/>
+	<xsd:element name="getPaymentsToActionResponseHook" type="tns:GetPaymentsToActionResponseHook" nillable="true"/>
+	<xsd:element name="getPaymentAuditHistoryRequestHook" type="tns:GetPaymentAuditHistoryRequestHook" nillable="true"/>
+	<xsd:element name="getPaymentAuditHistoryResponseHook" type="tns:GetPaymentAuditHistoryResponseHook" nillable="true"/>
+	<xsd:element name="actionPaymentRequestHook" type="tns:ActionPaymentRequestHook" nillable="true"/>
+	<xsd:element name="actionPaymentResponseHook" type="tns:ActionPaymentResponseHook" nillable="true"/>
+
+	<xsd:complexType name="ActionPaymentRequestHook">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">A type which provides a hook into the ActionPaymentRequest message</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="request" type="pay:ActionPaymentRequest">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">The element defining the actual request data.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="response" type="pay:ActionPaymentResponse">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">The element defining the actual response data.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="preProcess" type="xsd:boolean">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">True if this is a pre process hook request or false if post process.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ActionPaymentResponseHook">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">A type which provides a hook into the ActionPaymentResponse message</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="response" type="pay:ActionPaymentResponse">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">The element defining the actual response data.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="continueProcessing" type="xsd:boolean">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">True if the request should continue processing or false to return immediately</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="GetPaymentAuditHistoryRequestHook">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">A type which provides a hook into the GetPaymentAuditHistoryRequest message</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="request" type="pay:GetPaymentAuditHistoryRequest">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">The element defining the actual request data.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="response" type="pay:GetPaymentAuditHistoryResponse">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">The element defining the actual response data.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="preProcess" type="xsd:boolean">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">True if this is a pre process hook request or false if post process.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="GetPaymentAuditHistoryResponseHook">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">A type which provides a hook into the GetPaymentAuditHistoryResponse message</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="response" type="pay:GetPaymentAuditHistoryResponse">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">The element defining the actual response data.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="continueProcessing" type="xsd:boolean">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">True if the request should continue processing or false to return immediately</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="GetPaymentsToActionRequestHook">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">A type which provides a hook into the GetPaymentsToActionRequest message</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="request" type="pay:GetPaymentsToActionRequest">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">The element defining the actual request data.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="response" type="pay:GetPaymentsToActionResponse">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">The element defining the actual response data.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="preProcess" type="xsd:boolean">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">True if this is a pre process hook request or false if post process.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="GetPaymentsToActionResponseHook">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">A type which provides a hook into the GetPaymentsToActionResponse message</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="request" type="pay:GetPaymentsToActionRequest">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">The element defining the actual request data.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="response" type="pay:GetPaymentsToActionResponse">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">The element defining the actual response data.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="continueProcessing" type="xsd:boolean">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">True if the request should continue processing or false to return immediately</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

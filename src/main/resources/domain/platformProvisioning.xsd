@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.bottomline.com/webseries/schema/ps/platform/provisioning/v1" xmlns:btws="http://www.bottomline.com/webseries/schema/ps/platform/common/v1" xmlns:btent="http://www.bottomline.com/webseries/schema/ps/platform/entitlements/v1" xmlns:btacct="http://www.bottomline.com/webseries/schema/ps/platform/account/v1" xmlns:btcomp="http://www.bottomline.com/webseries/schema/ps/platform/achcompany/v1" xmlns:btuser="http://www.bottomline.com/webseries/schema/ps/platform/user/v1" xmlns:btug="http://www.bottomline.com/webseries/schema/ps/platform/usergroup/v1" xmlns:btpay="http://www.bottomline.com/webseries/schema/ps/platform/payment/v1" xmlns:btgen="http://www.bottomline.com/webseries/schema/ps/platform/generic/v1" xmlns:btlb="http://www.bottomline.com/webseries/schema/ps/platform/lockbox/v1" targetNamespace="http://www.bottomline.com/webseries/schema/ps/platform/provisioning/v1" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/common/v1" schemaLocation="platformCommon.xsd"/>
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/entitlements/v1" schemaLocation="platformEntitlements.xsd"/>
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/account/v1" schemaLocation="platformAccount.xsd"/>
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/achcompany/v1" schemaLocation="platformACHCompany.xsd"/>
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/usergroup/v1" schemaLocation="platformUserGroup.xsd"/>
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/user/v1" schemaLocation="platformUser.xsd"/>
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/payment/v1" schemaLocation="platformPayment.xsd"/>
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/generic/v1" schemaLocation="platformGenericEntity.xsd"/>
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/lockbox/v1" schemaLocation="platformLockbox.xsd"/>
+    <xsd:element name="acProvisioningRequest" type="tns:ProvisioningRequest">
+		<xsd:annotation>
+			<xsd:documentation>Root element for the XML embedded in an SPML request message</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="acProvisioningResponse" type="tns:ProvisioningResponse">
+		<xsd:annotation>
+			<xsd:documentation>Root element for the XML embedded in an SPML response message</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:simpleType name="StatusCode">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="success"/>
+			<xsd:enumeration value="failure"/>
+			<xsd:enumeration value="partial"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="ErrorDetail">
+		<xsd:sequence>
+			<xsd:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:anyAttribute namespace="##other" processContents="lax"/>
+	</xsd:complexType>
+	<xsd:complexType name="Error">
+		<xsd:sequence>
+			<xsd:element name="code" type="xsd:integer"/>
+			<xsd:element name="message" type="xsd:string"/>
+			<xsd:element name="details" type="tns:ErrorDetail" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="EntityTotals">
+		<xsd:sequence>
+			<xsd:element name="added" type="xsd:integer" default="0"/>
+			<xsd:element name="updated" type="xsd:integer" default="0"/>
+			<xsd:element name="deleted" type="xsd:integer" default="0"/>
+			<xsd:element name="errors" type="xsd:integer" default="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ResponseEntry">
+		<xsd:sequence>
+			<xsd:element name="status" type="tns:StatusCode"/>
+			<xsd:element name="totals" type="tns:EntityTotals"/>
+			<xsd:element name="error" type="tns:Error" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="UserResponse">
+		<xsd:complexContent>
+			<xsd:extension base="tns:ResponseEntry">
+				<xsd:sequence>
+					<xsd:element name="entitlements" type="tns:ResponseEntry" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:attributeGroup name="ProvisioningAttributes">
+		<xsd:attribute name="provisioningID" type="xsd:string" use="required"/>
+		<xsd:attribute name="environment" type="xsd:string" use="optional"/>
+		<xsd:attribute name="provisioningGroup" type="xsd:string" use="optional"/>
+		<xsd:attribute name="provisioningUser" type="xsd:string" use="optional"/>
+		<xsd:attribute name="batchId" type="xsd:string" use="optional"/>
+		<xsd:attribute name="parentId" type="xsd:string" use="optional"/>
+	</xsd:attributeGroup>
+	<xsd:complexType name="ProvisioningRequest">
+		<xsd:sequence>
+			<xsd:element name="customer" type="tns:Customer"/>
+		</xsd:sequence>
+		<xsd:attributeGroup ref="tns:ProvisioningAttributes"/>
+	</xsd:complexType>
+	<xsd:complexType name="ProvisioningResponse">
+		<xsd:sequence>
+			<xsd:element name="customerResults" type="tns:CustomerResults"/>
+		</xsd:sequence>
+		<xsd:attributeGroup ref="tns:ProvisioningAttributes"/>
+	</xsd:complexType>
+	<xsd:complexType name="CustomerResults">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">Result summary and detail error messages returned in response to a provisioning request for a customer/user group.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="status" type="tns:StatusCode">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Status code for overall request. If message fails to process at all error codes and details will be provided at this level. If request is processed details will be provided in the appropriate section of the response message based on the details of the request.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="error" type="tns:Error" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Request leveel error codes and details</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="entitlementsResults" type="tns:ResponseEntry" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Results and/or error codes related to processing customer entitlements</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="accountsResults" type="tns:ResponseEntry" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Results and/or error codes related to processing customer accounts</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="achCompaniesResults" type="tns:ResponseEntry" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Results and/or error codes related to processing customer ACH companies</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="otherEntitiesResults" type="tns:ResponseEntry" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Results and/or error codes related to processing other entities related to customer/user group.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="usersResults" type="tns:ResponseEntry" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Results and/or error codes related to processing individual users.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="Customer">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">Encapsulates client view including products and types enabled for customer, customer's accounts and ach companies. May also contain details of one or more client users, including the user's </xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="customerInfo" type="btug:UserGroup" minOccurs="1"/>
+			<xsd:element name="entitlements" type="btent:TypesByProduct" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="accounts" type="btacct:AccountWithEntitlements" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="achCompanies" type="btcomp:ACHCompanyWithEntitlements" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="otherEntities" type="btgen:EntitiesByType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="userGroupLimits" type="btug:UserGroupLimits" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="accountLimits" type="btacct:AccountLimits" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="roles" type="btent:Role" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="users" type="tns:UserWithEntitlements" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="accountEntitlements" type="btacct:AccountEntitlements" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="panelApproval" type="btug:PanelApproval" minOccurs="0"/>
+			<xsd:element name="hvpThresholds" type="btug:UserGroupHvpThreshold" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>High Value Payment Thresholds</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+            <xsd:element name="lockboxes" type="btlb:UsergroupLockbox" minOccurs="0" maxOccurs="unbounded">
+                <xsd:annotation>
+                    <xsd:documentation>Lockboxes</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+		</xsd:sequence>
+		<xsd:attribute ref="btent:provisioningAction" use="optional"/>
+		<xsd:attribute name="sourceGroup" type="xsd:string" use="optional">
+			<xsd:annotation>
+				<xsd:documentation>Id of source user group. This attribute is used only when provisioning action is Clone.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="cloneRoles" type="xsd:boolean" use="optional">
+			<xsd:annotation>
+				<xsd:documentation>This attribute is used only when provisioning action is Clone.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="cloneEntitlements" type="xsd:boolean" use="optional">
+			<xsd:annotation>
+				<xsd:documentation>This attribute is used only when provisioning action is Clone.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="maintainCurrentStatus" type="xsd:boolean" use="optional">
+			<xsd:annotation>
+				<xsd:documentation>This attribute is used indicate whether user group status should be kept same or go through the approval process if set so in the event parameters.  Default to false</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="defaultPassword" type="xsd:string" use="optional">
+			<xsd:annotation>
+				<xsd:documentation>Default password to be used for initial admin users that are created automatically. This password is set as expired and admins are forced to change it upon first login.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:complexType>
+	<xsd:complexType name="ActionsByProduct">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">List of actions grouped by product for conveinence and readability. Many consumers will be interested in only one product. Each action contains product, function and type code elements and could be processed independently of the parent element.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="productCode" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Product code associated with this particular group of types</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="actions" type="btent:ActionDataEntitlement" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">List of transction types enabled for this product along with any per action limits</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+		<xsd:attribute ref="btent:provisioningAction" use="optional"/>
+	</xsd:complexType>
+	<xsd:complexType name="UserWithEntitlements">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en"/>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="userInfo" type="btuser:User" minOccurs="1"/>
+			<xsd:element name="entitlements" type="tns:ActionsByProduct" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">List of actions, grouped by product, to which the user has entitlements.Each entitled action may also have limits (or restrictions) on its use.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+		<xsd:attribute ref="btent:provisioningAction" use="optional"/>
+	</xsd:complexType>
+</xsd:schema>

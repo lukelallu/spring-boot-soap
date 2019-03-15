@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2012 rel. 2 (x64) (http://www.altova.com) by Bottomline Technologies (Bottomline Technologies) -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:btamt="http://www.bottomline.com/webseries/schema/ps/platform/amount/v1" xmlns:tns="http://www.bottomline.com/webseries/schema/ps/platform/fx/v1" targetNamespace="http://www.bottomline.com/webseries/schema/ps/platform/fx/v1" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/amount/v1" schemaLocation="platformAmount.xsd"/>
+	<xsd:complexType name="ForExDealStatus">
+		<xsd:sequence>
+			<xsd:element name="ForExDealStatusCode" type="tns:ForExDealStatusCode">
+				<xsd:annotation>
+					<xsd:documentation>Defines the status of the Deal.  Valid Values: Quoted, Confirmed, Expired, Canceled, Complete.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="Timeframe" id="Timeframe">
+		<xsd:annotation>
+			<xsd:documentation>An optionally recurring frame of time</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="StartDt" type="xsd:dateTime" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The start date</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="EndDt" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The end date</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ExchangeRate">
+		<xsd:sequence>
+			<xsd:element name="ExchRate">
+				<xsd:annotation>
+					<xsd:documentation>Currency Exchange Rate.  Indicates the number of units of a currency that is equivalent to one unit of another currency.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:decimal">
+						<xsd:fractionDigits value="8"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:choice>
+				<xsd:sequence>
+				<xsd:element name="ExchConvertRule" type="tns:ExchConvertRule">
+					<xsd:annotation>
+						<xsd:documentation>Currency Conversion Indicator.  This value determines the position of the currency pairs in the exchange ratio.  When the ExchConvertRule 	value does not match the ExchMktConvertRule this is an indication that the rate has been inverted from the market convention for that currency pair.
+						Valid values: Direct, Indirect.
+						</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+						<xsd:element name="ContraCurAmt" type="btamt:Amount">
+						<xsd:annotation>
+							<xsd:documentation>The amount of the contra currency.  This amount will be calculated for the response using the retrieved ForEx rate applicable to the currency pair.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="ContraCurDecimalsNo" type="btamt:DecimalPlaces"/>
+				</xsd:sequence>
+				<xsd:sequence>
+						<xsd:element name="debitAmount" type="btamt:CurrencyAmount" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation xml:lang="en">Debit amount with currency code.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="debitCurDecimalsNo" type="btamt:DecimalPlaces"/>
+						<xsd:element name="creditAmount" type="btamt:CurrencyAmount" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation xml:lang="en">Credit amount with currency code.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="creditCurDecimalsNo" type="btamt:DecimalPlaces"/>
+				</xsd:sequence>
+			</xsd:choice>
+			
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:simpleType name="ForExValDtType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="Cash"/>
+			<xsd:enumeration value="Tomorrow"/>
+			<xsd:enumeration value="Forward"/>
+			<xsd:enumeration value="Window"/>
+			<xsd:enumeration value="Spot"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="ExchConvertRule">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="Direct"/>
+			<xsd:enumeration value="Indirect"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="ForExRateType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="Live"/>
+			<xsd:enumeration value="Daily"/>
+			<xsd:enumeration value="Weekend"/>
+			<xsd:enumeration value="Indicative"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="BuySellIndicator">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="Buy"/>
+			<xsd:enumeration value="Sell"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="ForExDealStatusCode">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="Quoted"/>
+			<xsd:enumeration value="Confirmed"/>
+			<xsd:enumeration value="Expired"/>
+			<xsd:enumeration value="Canceled"/>
+			<xsd:enumeration value="Complete"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+</xsd:schema>

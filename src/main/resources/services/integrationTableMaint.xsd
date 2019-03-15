@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.bottomline.com/webseries/schema/is/message/tablemaint/v1" xmlns:btws="http://www.bottomline.com/webseries/schema/ps/platform/common/v1" xmlns:btmsg="http://www.bottomline.com/webseries/schema/ps/message/common/v1" targetNamespace="http://www.bottomline.com/webseries/schema/is/message/tablemaint/v1" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/common/v1" schemaLocation="../domain/platformCommon.xsd"/>
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/message/common/v1" schemaLocation="platformMessage.xsd"/>
+	<xsd:element name="insertRequest" type="tns:InsertRequest" nillable="true"/>
+	<xsd:element name="insertResponse" type="tns:InsertResponse" nillable="true"/>
+	<xsd:element name="modifyRequest" type="tns:ModifyRequest" nillable="true"/>
+	<xsd:element name="modifyResponse" type="tns:ModifyResponse" nillable="true"/>
+	<xsd:element name="deleteRequest" type="tns:DeleteRequest" nillable="true"/>
+	<xsd:element name="deleteResponse" type="tns:DeleteResponse" nillable="true"/>
+	<xsd:element name="readRequest" type="tns:ReadRequest" nillable="true"/>
+	<xsd:element name="readResponse" type="tns:ReadResponse" nillable="true"/>
+	<xsd:complexType name="InsertRequest">
+		<xsd:sequence>
+			<xsd:element name="requestHeader" type="btmsg:RequestHeader"/>
+			<xsd:element name="data" type="btws:nameValuePair" minOccurs="1" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>
+						List of name value pairs that represents the record data to be inserted. 
+						Individual service instance will have product,function,type values injected that will allow for resolution of tablename.
+				</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="InsertResponse">
+		<xsd:sequence>
+			<xsd:element name="responseHeader" type="btmsg:ResponseHeader"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ModifyRequest">
+		<xsd:sequence>
+			<xsd:element name="requestHeader" type="btmsg:RequestHeader"/>
+			<xsd:element name="data" type="btws:nameValuePair" minOccurs="1" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>
+						List of name value pairs that represents the record data to be modified 
+						Individual service instance will have product,function,type values injected that will allow for resolution of tablename.
+				</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ModifyResponse">
+		<xsd:sequence>
+			<xsd:element name="responseHeader" type="btmsg:ResponseHeader"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="DeleteRequest">
+		<xsd:sequence>
+			<xsd:element name="requestHeader" type="btmsg:RequestHeader"/>
+			<xsd:element name="data" type="btws:nameValuePair" minOccurs="1" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>
+						List of name value pairs that represents the record data to be deleted 
+						Only key fields need to be passed. Others will be ignored.
+						Individual service instance will have product,function,type values injected that will allow for resolution of tablename.
+				</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="DeleteResponse">
+		<xsd:sequence>
+			<xsd:element name="responseHeader" type="btmsg:ResponseHeader"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ReadRequest">
+		<xsd:sequence>
+			<xsd:element name="requestHeader" type="btmsg:RequestHeader"/>
+			<xsd:element name="data" type="btws:nameValuePair" minOccurs="1" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>
+						List of name value pairs that represents the record data to be read 
+						Only key fields need to be passed. Others will be ignored.
+						Individual service instance will have product,function,type values injected that will allow for resolution of tablename.
+				</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ReadResponse">
+		<xsd:sequence>
+			<xsd:element name="responseHeader" type="btmsg:ResponseHeader"/>
+			<xsd:element name="data" type="btws:nameValuePair" minOccurs="1" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>
+						List of name value pairs that represents the record data.
+						Individual service instance will have product,function,type values injected that will allow for resolution of tablename.
+				</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ListRequest">
+		<xsd:sequence>
+			<xsd:element name="requestHeader" type="btmsg:RequestHeaderMulti"/>
+			<!-- TODO  add search criteria -->
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ListResponse">
+		<xsd:sequence>
+			<xsd:element name="responseHeader" type="btmsg:ResponseHeader"/>
+			<xsd:element name="totalItems" type="xsd:long" >
+				<xsd:annotation>
+					<xsd:documentation>Total number of records for query, Actual number returned in response is controled by paging parameters passed in request.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="records" type="btws:Record" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>
+						List of records that contain name value pairs that represents the record data.
+						Individual service instance will have product,function,type values injected that will allow for resolution of tablename.
+				</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ModelInfoRequest">
+		<xsd:sequence>
+			<xsd:element name="requestHeader" type="btmsg:RequestHeader"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ModelInfoResponse">
+		<xsd:sequence>
+			<xsd:element name="responseHeader" type="btmsg:ResponseHeader"/>
+			<xsd:element name="fieldInfo" type="btws:FieldInfo" minOccurs="1" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>
+						List of fields and their attributes. e.g. data type, length, min/max, etc.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="FXRequest"> 
+		<xsd:sequence>
+			<xsd:element name="requestHeader" type="btmsg:RequestHeader"/>
+			<xsd:element name="items" type="tns:FXItemRequest" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>
+						List of items that contain FX item request
+				</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="FXItemRequest">
+		<xsd:sequence>
+			<xsd:element name="data" type="btws:nameValuePair" minOccurs="1" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>
+						List of name value pairs that represents the fx item request key fields like tnum, updatecount, product, typecode, function.
+				</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="FXResponse"> 
+		<xsd:sequence>
+			<xsd:element name="responseHeader" type="btmsg:ResponseHeader"/>
+			<xsd:element name="totalItems" type="xsd:long" >
+				<xsd:annotation>
+					<xsd:documentation>Total number of records for query, Actual number returned in response is controled by paging parameters passed in request.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="items" type="tns:FXItemResponse" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>List of items that contain FX item response</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="FXItemResponse">
+		<xsd:sequence>
+			<xsd:element name="data" type="btws:nameValuePair" minOccurs="1" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>List of name value pairs that represents the fx item response fields like exchange rate, contract id, contra amount, quote expiration.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+</xsd:schema>

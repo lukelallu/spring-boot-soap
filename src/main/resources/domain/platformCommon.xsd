@@ -1,0 +1,875 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.bottomline.com/webseries/schema/ps/platform/common/v1" xmlns:xmime="http://www.w3.org/2005/05/xmlmime" targetNamespace="http://www.bottomline.com/webseries/schema/ps/platform/common/v1" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+<xsd:import namespace="http://www.w3.org/2005/05/xmlmime" schemaLocation="../w3c/xmlmime.xsd"/>
+	<xsd:complexType name="nameValuePair">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">A name value pair representing a generic structure</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="name" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">The name of the pair structure</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="value" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">The value of the pair structure</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="nameValuePairList">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">A list of name value pairs</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="item" type="tns:nameValuePair" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">A name value pair representing a generic structure</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="Record">
+		<xsd:sequence>
+			<xsd:element name="data" type="tns:nameValuePair" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="TypeInfo">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">Attributes used to describe a transaction type</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="productCode" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Product code denoting product this type fall under, e.g. PAY for payments</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="functionCode" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Function code denoting context of how the type is used. Examples are INST = paymment instructions, TMPL = payment template, MAINT = refreence data mainteance, RPT = reporting. In certain instance a wildcard '*' may be present. This indicates the type is being referenced across all valiid functions. This may be used in the case of accounts where they are enabled for a payment type both for instructions and templates.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="typeCode" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Type code denoting instruction or data type, e.g. FEDWIRE for US domestic wire payment</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ActionData">
+		<xsd:sequence>
+			<xsd:element name="productCode" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Product code denoting product this type fall under, e.g. PAY for payments</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="functionCode" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Function code denoting context of how the type is used. Examples are INST = paymment instructions, TMPL = payment template, MAINT = refreence data mainteance, RPT = reporting. In certain instance a wildcard '*' may be present. This indicates the type is being referenced across all valiid functions. This may be used in the case of accounts where they are enabled for a payment type both for instructions and templates.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="typeCode" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Type code denoting instruction or data type, e.g. FEDWIRE for US domestic wire payment</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="actionMode" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Action being performed e.g. INST / BATCH / TMPL</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="entryMethod" type="xsd:int" default="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Entry method e.g. free form / import or from template</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="typeData">
+		<xsd:sequence>
+			<xsd:element name="productCode" type="xsd:string"/>
+			<xsd:element name="functionCode" type="xsd:string"/>
+			<xsd:element name="typeCode" type="xsd:string"/>			  
+			<xsd:element name="data" type="tns:nameValuePairList"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="RowIdentifier">
+		<xsd:sequence>
+			<xsd:element name="TNum" type="xsd:string"/>
+			<xsd:element name="updateCount" type="xsd:integer" minOccurs="0"/>
+			<xsd:element name="productCode" type="xsd:string"/>
+			<xsd:element name="functionCode" type="xsd:string"/>
+			<xsd:element name="typeCode" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="UpdateId">
+		<xsd:sequence>
+			<xsd:element name="TransactionIdentifier" type="xsd:string"/>
+			<xsd:element name="updateCount" type="xsd:integer"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:group name="CityStateZIP">
+		<xsd:sequence>
+			<xsd:element name="city" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="state" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="province" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="postalCode" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="countryCode" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:group>
+	<xsd:group name="Address1">
+		<xsd:sequence>
+			<xsd:element name="address1" type="xsd:string" minOccurs="0"/>
+			<xsd:group ref="tns:CityStateZIP"/>
+		</xsd:sequence>
+	</xsd:group>
+	<xsd:group name="Address2">
+		<xsd:sequence>
+			<xsd:element name="address1" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="address2" type="xsd:string" minOccurs="0"/>
+			<xsd:group ref="tns:CityStateZIP"/>
+		</xsd:sequence>
+	</xsd:group>
+	<xsd:group name="Address3">
+		<xsd:sequence>
+			<xsd:element name="address1" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="address2" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="address3" type="xsd:string" minOccurs="0"/>
+			<xsd:group ref="tns:CityStateZIP" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:group>
+	<xsd:group name="Address4">
+		<xsd:sequence>
+			<xsd:element name="address1" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="address2" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="address3" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="address4" type="xsd:string" minOccurs="0"/>
+			<xsd:group ref="tns:CityStateZIP" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:group>
+	<xsd:complexType name="AuditItem">
+		<xsd:sequence>
+			<xsd:element name="userGroup" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">WebSeries user group of user performing action</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="userId" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">WebSeries User ID  of user performing the action</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="timestamp" type="xsd:dateTime">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Date and time action was performed</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:group name="StandardAuditItems">
+		<xsd:sequence>
+			<xsd:element name="entered" type="tns:AuditItem" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Details of  data entry</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="lastModified" type="tns:AuditItem" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Details of data modification</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="deleted" type="tns:AuditItem" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Details of data deletion</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:group>
+	<xsd:complexType name="Setting">
+		<xsd:sequence>
+			<xsd:element name="name" type="xsd:string"/>
+			<xsd:element name="value" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="Settings">
+		<xsd:sequence>
+			<xsd:element name="setting" type="tns:Setting" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ProductSettings">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">List of settings related to a product. Each setting is a name/value pair.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="productCode" type="xsd:string"/>
+			<xsd:element name="settings" type="tns:Setting" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">One or more product specific level settings. Each setting is a name/value pair.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="Image">
+		<xsd:simpleContent>
+			<xsd:restriction base="xmime:base64Binary">
+				<xsd:attribute ref="xmime:contentType" use="required"/>
+			</xsd:restriction>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="BillingAccount">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">Account Number and Bank Code of the Billing Account.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="accountNumber" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="bankCode" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ActionAlertMessage">
+		<xsd:sequence>
+			<xsd:element name="alertType" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Alert Type for this Action Based Alert Message.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="userGroup" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">User Group  for this Action Based Alert Message.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="status" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">status for the corresponding Action Mode  for this Action Based Alert Message.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="subject" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Subject for Alert Message.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+            <xsd:element name="emailAddress" type="xsd:string">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">Recipient of this Alert message.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+             <xsd:element name="keyColumns" type="xsd:string">
+                 <xsd:annotation>
+                     <xsd:documentation xml:lang="en">key column field to determine the account to associate with alert.</xsd:documentation>
+                 </xsd:annotation>
+             </xsd:element>
+             <xsd:element name="keyColumnValues" type="xsd:string">
+                 <xsd:annotation>
+                     <xsd:documentation xml:lang="en">key account to associate with alert.</xsd:documentation>
+                 </xsd:annotation>
+             </xsd:element>
+			<xsd:element name="data" type="tns:nameValuePair" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">List of NameValuePairs</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="AlertMessage">
+		<xsd:sequence>
+			<xsd:element name="alertId" type="xsd:int">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Alert Id for this Action Based Alert Message.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="alertType" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Alert Type for this Action Based Alert Message.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="userGroup" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">User Group  for this Action Based Alert Message.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="subject" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Subject for Alert Message.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="emailAddress" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Recipient of this Alert message.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="accountNumberField" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Column name from table for Account Number - used for account masking.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="bankCodeField" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Column name from table for Bank Code - used for account masking.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			 <xsd:element name="keyColumns" type="xsd:string">
+                 <xsd:annotation>
+                     <xsd:documentation xml:lang="en">key column field to determine the account to associate with alert.</xsd:documentation>
+                 </xsd:annotation>
+             </xsd:element>
+             <xsd:element name="keyColumnValues" type="xsd:string">
+                 <xsd:annotation>
+                     <xsd:documentation xml:lang="en">key account to associate with alert.</xsd:documentation>
+                 </xsd:annotation>
+             </xsd:element>
+			<xsd:element name="data" type="tns:nameValuePairList" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">List of Data - List of NameValuePairLists</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="TypeAheadField">
+		<xsd:sequence>
+			<xsd:element name="field" type="xsd:string"/>
+			<xsd:element name="type" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="FieldInfo">
+		<xsd:sequence>
+			<xsd:element name="name" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Field or column name</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="dataType" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Data type of the field</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="fieldType" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Optional. Field type may be more specific than data type e.g. for string data type the field type may be UPPERALPHA or SWIFT, etc.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="size" type="xsd:int">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Field size</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="precision" type="xsd:int" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">For numeric data, this is the maximum precision. For character data, this is the length in characters. For datetime datatypes, this is the length in characters of the String representation (assuming the maximum allowed precision of the fractional seconds component).</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="key" type="xsd:boolean">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Indicates if field part of the key</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="protected" type="xsd:boolean" default="false" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Indicates if field is protected, i.e. not directly modifable but possibly populated by a related lookup</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="mandatory" type="xsd:boolean" default="false" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Indicates if field is mandatory, i.e. required to populated prior to persistence</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="visible" type="xsd:boolean" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Optional. Indicates if field is expected to be displayed to user. This is currently in use for limited number of types.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="editableOnCreate" type="xsd:boolean" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Indicates if field is editable by user on create</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="editableOnModify" type="xsd:boolean" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Indicates if field is editable by user on modify</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="minValue" type="xsd:double" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Minimum value</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="maxValue" type="xsd:double" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Maximum value</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="minLen" type="xsd:int" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Minimum length</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="maxLen" type="xsd:int" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Maximum length</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="fieldLabel" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Resolved label name for the field</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="fieldUIType" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Field UI control type</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="fieldUIOrder" type="xsd:int" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Field UI Order as they appear in the screen</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="relatedProperty" type="xsd:string" >
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">field name associated with this field or other information for this field</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="fieldGroup" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Name of the Field Group this FieldType belongs to</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="info" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Information tooltip to display.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="checkboxOnValue" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Applicable only if fieldUIType is checkbox, specifies the on value</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="checkboxOffValue" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Applicable only if fieldUIType is checkbox, specifies the off value</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="choices" type="tns:nameValuePair" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Applicable only if fieldUIType is radio, List of Data - List of NameValuePairs for the radio buttons</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="virtualField" type="xsd:boolean" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Indicates if field is derived, not present in the instruction model but present in field types</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="dependsOn" type="xsd:string" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Applicable only if fieldUIType is combobox, List of Data - List of fields that this combo depends on</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="dependsOnMe" type="xsd:string" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">List of combobox fields that are dependent on this field</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="value" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Value of the field, used for setting the default value.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>			
+			<xsd:element name="placeHolder" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Placeholder that contains a user hint in an input field</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="typeAhead" type="tns:TypeAheadField" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Applicable only if fieldUIType is combobox. List of TypeAheadFields is the list of fields applicable for type ahead search</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+				<xsd:element name="typeAheadFree" type="xsd:boolean" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Indicates if the type ahead field allows to be free form</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="pageSize" type="xsd:int" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">page size for Combo Box</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="displayButtonLinkLabel" type="xsd:int">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Flag to indicate if the label of the button link should be displayed.  1 to display, 0 not</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="comboAllowDuplicates" type="xsd:boolean" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Indicates if the combo allows duplicate values</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="FieldGroup">
+		<xsd:sequence>
+			<xsd:element name="fieldGroupName" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Name for the Field Group</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="fieldGroupLabel" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Applicatio Resource for the Field Group</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="columnNumber" type="xsd:int">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">column (1, 2 or 3) </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="rowNumber" type="xsd:int">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">row</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="columnSpan" type="xsd:int">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">The number of columns this column would span</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="fieldOrientation" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">The orientation, vertical (V) or horizontal (H), for the fields within the group. The default is V (for vertical). </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="collapsible" type="xsd:int">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">if FieldGroup is collapsible</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="container" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">name of parent container</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="subgroupof" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">name of group that this group is a subgroup of (parent subgroup name)</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+ 		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="FieldContainer">
+		<xsd:sequence>
+			<xsd:element name="container" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Name for the container</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="label" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Applicatio Resource for the Container</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="rowNumber" type="xsd:int">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">container row number</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="numColumns" type="xsd:int">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">number of columns in the container (1, 2 or 3) </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="collapsible" type="xsd:int">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">if container is collapsible</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="groups" type="tns:FieldGroup" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">List of field groups within the container</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+ 		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ModelInfo">
+		<xsd:sequence>
+			<xsd:element name="fieldInfoList" type="tns:FieldInfo" minOccurs="1" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>
+						List of fields and their attributes. e.g. data type, length, min/max, etc.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="fieldContainerList" type="tns:FieldContainer" minOccurs="1" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>
+						List of fields and the grouping information
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="childFieldInfoList" type="tns:FieldInfo" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>
+						List of fields and their attributes. e.g. data type, length, min/max, etc.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="childfieldContainerList" type="tns:FieldContainer" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>
+						List of fields and the grouping information
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="typeInfo" type="tns:TypeInfo" minOccurs="0" maxOccurs="1" >
+				<xsd:annotation>
+					<xsd:documentation>
+						This will contain the typeInfo
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="childKeys" type="xsd:string" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">List of child keys that will be sued when the child data is requested </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="childGridName" type="xsd:string" minOccurs="0" maxOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Grid Name of the Child</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="driverFields" type="xsd:string" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">DriverFields for Parent</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="childDriverFields" type="xsd:string" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">DriverFields for Child</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="childSequenceColumn" type="xsd:string"  minOccurs="0"/>
+			<xsd:element name="hasChildren" type="xsd:boolean" />
+			<xsd:element name="grandChildName" type="xsd:string"/>
+			<xsd:element name="grandChildFields" type="xsd:string" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">DriverFields for Child</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="SecurityQuestion">
+		<xsd:sequence>
+			<xsd:element name="question" type="xsd:string"/>
+			<xsd:element name="answer" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="ActionWithSubtype">
+		<xsd:complexContent>
+			<xsd:extension base="tns:ActionData">
+				<xsd:sequence>
+					<xsd:element name="subType" type="xsd:string"/>
+					<xsd:element name="entryClass" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="ServiceClientContext"> 
+		<xsd:annotation>
+			<xsd:documentation>Defines context information associated with a service call</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="actionData" type="tns:ActionWithSubtype"> 
+				<xsd:annotation>
+					<xsd:documentation>Action context for the call</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="serviceName" type="xsd:string"> 
+				<xsd:annotation>
+					<xsd:documentation>Name of the service</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="pageTitle" type="xsd:string"> 
+<!-- 				<xsd:annotation>
+					<xsd:documentation>TODO page title used where?</xsd:documentation>
+				</xsd:annotation>
+ -->			</xsd:element>
+			<xsd:element name="fromProduct" type="xsd:string"> 
+<!-- 				<xsd:annotation>
+					<xsd:documentation>TODO Doesn't appear to be used</xsd:documentation>
+				</xsd:annotation>
+ -->			</xsd:element>
+			<xsd:element name="fromFunction" type="xsd:string"> 
+<!-- 				<xsd:annotation>
+					<xsd:documentation>TODO Doesn't appear to be used</xsd:documentation>
+				</xsd:annotation>
+ -->			</xsd:element>
+			<xsd:element name="keyList" type="xsd:string" minOccurs="0" maxOccurs="unbounded"> 
+				<xsd:annotation>
+					<xsd:documentation>List of key values e.g. from an entity being returned</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ConfirmResults">
+		<xsd:sequence>
+			<xsd:element name="result" type="xsd:boolean"> 
+				<xsd:annotation>
+					<xsd:documentation>Determines whether the confirmation was successful</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="messages" type="xsd:string" maxOccurs="unbounded"> 
+				<xsd:annotation>
+					<xsd:documentation>Messages which can indicate information , warnings or errors</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="confirmData" type="tns:nameValuePairList" minOccurs="0" maxOccurs="unbounded"> 
+				<xsd:annotation>
+					<xsd:documentation>List of fields returned in the confirmation with values. Usually used to return important information after the action completes</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="confirmPollingKeys" type="tns:nameValuePairList" minOccurs="0" maxOccurs="unbounded"> 
+<!-- 				<xsd:annotation>
+					<xsd:documentation>TODO Seems used to add the TNUM value e.g. in PaymentService. Why is the name PollingKeys used? Why is polling related to this</xsd:documentation>
+				</xsd:annotation>
+ -->			</xsd:element>
+			<xsd:element name="resultType" type="xsd:string" minOccurs="0"> 
+<!-- 				<xsd:annotation>
+					<xsd:documentation>TODO I can only see one occurrence of WARNING used in TableMaintService</xsd:documentation>
+				</xsd:annotation>
+ -->			</xsd:element>
+			<xsd:element name="warningAction" type="xsd:string"> 
+	<!-- 			<xsd:annotation>
+					<xsd:documentation>TODO Seems to only be used in TableMaintService with values APPROVE and SAVE mapped to the chained action INSERT / APPROVE. Why is this useful? Where is it used?</xsd:documentation>
+				</xsd:annotation>
+	 -->		</xsd:element>
+			<xsd:element name="updateCount" type="xsd:string"> 
+				<xsd:annotation>
+					<xsd:documentation>The current update count of the entity an action has been performed on</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="entryMethod" type="xsd:string"> 
+				<xsd:annotation>
+					<xsd:documentation>Entry method of the data being confirmed</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="keyValue" type="xsd:string"> 
+				<xsd:annotation>
+					<xsd:documentation>The key value of the data being confirmed</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ConfirmData"> 
+		<xsd:annotation>
+			<xsd:documentation>Information related to a confirmation action which has been performed</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+				<xsd:element name="totalSuccess" type="xsd:int" default="0"> 
+					<xsd:annotation>
+						<xsd:documentation>Total number of items which succeeded.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="totalFail" type="xsd:int" default="0">
+					<xsd:annotation>
+						<xsd:documentation>Total number of items which failed.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="chainedAction" type="xsd:boolean" default="false">
+					<xsd:annotation>
+						<xsd:documentation>If the action performed was a result of another action being performed first.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>		
+				<xsd:element name="confirmResults" type="tns:ConfirmResults" minOccurs="0" maxOccurs="unbounded">
+					<xsd:annotation>
+						<xsd:documentation>Detailed information about the confirmation being performed</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="RecipientContactDetail">
+	   <xsd:annotation>
+	   		<xsd:documentation xml:lang="en">Recipient contact detail, such as phone number or email and whether or not it is selected for the alert</xsd:documentation>
+	   </xsd:annotation>
+		<xsd:sequence>
+	       <xsd:element name="value" type="xsd:string">
+				 <xsd:annotation>
+	    	 		<xsd:documentation xml:lang="en">Value of the contact, either an email address, phone number, sms number, or fax number</xsd:documentation>
+	     		</xsd:annotation>
+	   		</xsd:element>
+	       <xsd:element name="alias" type="xsd:string">
+				 <xsd:annotation>
+	    	 		<xsd:documentation xml:lang="en">Alias for the contact method, e.g. work email</xsd:documentation>
+	     		</xsd:annotation>
+	   		</xsd:element>
+	   		<xsd:element name="selected"  type="xsd:boolean" default="false" minOccurs="0">
+				<xsd:annotation>
+	   	   			<xsd:documentation xml:lang="en">true or false indicator to specify if this contact is used by the alert</xsd:documentation>
+	   	   		</xsd:annotation>
+	   		</xsd:element>
+	   		<xsd:element name="extension"  type="xsd:string" default="" minOccurs="0">
+				<xsd:annotation>
+	   	   			<xsd:documentation xml:lang="en">phone extension, only valid for phone contacts</xsd:documentation>
+	   	   		</xsd:annotation>
+	   		</xsd:element>
+	   		<xsd:element name="pauseIndicator"  type="xsd:string" default="" minOccurs="0">
+				<xsd:annotation>
+	   	   			<xsd:documentation xml:lang="en">pause indicator for phone contact only</xsd:documentation>
+	   	   		</xsd:annotation>
+	   		</xsd:element>
+	   	</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="RecipientContactDetailList">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">List of recipient contact details</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="contacts" type="tns:RecipientContactDetail" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation  xml:lang="en">list of contacts (email addresses, phone number, sms numbers, or fax numbers)</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="Recipient">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">Alert Recipient.  Includes recipient name, which could be a free form email address, and the recipient's contact information</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="name" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Name of recipient, this could be a free form email address</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="emails" type="tns:RecipientContactDetailList" >
+				<xsd:annotation>
+					<xsd:documentation  xml:lang="en">list of emails for this recipient</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="phonenumbers" type="tns:RecipientContactDetailList" >
+				<xsd:annotation>
+					<xsd:documentation  xml:lang="en">list of phone numbers for this recipient</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="sms" type="tns:RecipientContactDetailList" >
+				<xsd:annotation>
+					<xsd:documentation  xml:lang="en">list of sms numbers for this recipient</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="faxes" type="tns:RecipientContactDetailList" >
+				<xsd:annotation>
+					<xsd:documentation  xml:lang="en">list of fax numbers for this recipient</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="Recipients">
+		<xsd:annotation>
+			<xsd:documentation>List of recipients</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="recipients" type="tns:Recipient" minOccurs="1" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation  xml:lang="en">list of recipients</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>		
+	</xsd:complexType>
+</xsd:schema>

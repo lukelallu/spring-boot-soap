@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" xmlns:tns="http://www.bottomline.com/webseries/schema/ps/platform/balance/v1" xmlns:btacct="http://www.bottomline.com/webseries/schema/ps/platform/account/v1" xmlns:btamt="http://www.bottomline.com/webseries/schema/ps/platform/amount/v1" xmlns:btbank="http://www.bottomline.com/webseries/schema/ps/platform/bank/v1" targetNamespace="http://www.bottomline.com/webseries/schema/ps/platform/balance/v1" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+	<xsd:annotation>
+		<xsd:documentation xml:lang="en"> Standard models for balance data. Part of BTR standard product.</xsd:documentation>
+	</xsd:annotation>
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/account/v1" schemaLocation="platformAccount.xsd"/>
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/amount/v1" schemaLocation="platformAmount.xsd"/>
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/bank/v1" schemaLocation="platformBank.xsd"/>
+	<xsd:complexType name="BalanceData">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">Basic balance data structure. This is extended for more specific use cases e.g. current or prior day</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="account" type="btacct:AccountData" nillable="false">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en"> Standard account information</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="statementDate" type="xsd:date" nillable="false">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en"> The as of date for the balances</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="bankId" type="btbank:BankIdentifier" nillable="false">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Bank details for the source of balance information including name and codes (internal, BIC, ABA)</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="openingLedger" type="btamt:Amount" nillable="true">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en"> The ledger balance at the start of the business day. BAI code 010 or Tag 60F in SWIFT MT940.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="openingAvailable" type="btamt:Amount" nillable="true">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">BAI Code 040 or SWIFT tag 60F </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="reportedTimestamp" type="xsd:dateTime" nillable="false">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Timestamp indicating latest update to balance information</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="CurrentBalanceData">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">Current balance data structure. Extends basic balance structure to add current available and ledger balances.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="tns:BalanceData">
+				<xsd:sequence>
+					<xsd:element name="currentLedger" type="btamt:Amount" nillable="true">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">Balance calculated based on opening ledger and sum of debits and credits (intra-day transactions and previously posted forward dated transactions for this day) impacting the ledger balance </xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="currentAvailable" type="btamt:Amount" nillable="true">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">Balance calculated based on opening available and sum of debits and credits  (intra-day transactions and previously posted forward dated transactions for this day) impacting the available balance </xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="totalDebits" type="btamt:Amount" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">Sum of intra-day debits if availableand used to calculate current balances.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="totalCredits" type="btamt:Amount" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">Sum of intra-day credits if available and used to calculate current balances.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="unclearedFunds" type="btamt:Amount" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">Amount of funds posted but not yet available (ledger - available).</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="PriorBalanceData">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">Prior balance data structure. Extends basic balance structure to add opening available and ledger balances.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="tns:BalanceData">
+				<xsd:sequence>
+					<xsd:element name="closingLedger" type="btamt:Amount" nillable="true">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">Corresponds to tag 62F on a SWIFT MT940 or MT950 message. This value is obtained from the GIR Balance Detail record with BAI Code = “015”.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="closingAvailable" type="btamt:Amount" nillable="true">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">Corresponds to tag  tag 64 on a SWIFT MT940 or MT950 message. This value is obtained from the GIR Balance Detail record with BAI Code = “045”.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="PriorBalanceDataExtended">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">Extended Prior balance data structure.Includes forward or float balances plus total debits and credits.S.W.I.F.T. field 65 Forward Available Funds. Subfield 2 date indicates the day on which funds are availableto the customer. To determine the BAI type code for reporting funds availability, calculate the number of business days between this date and the date in field 62F Closing Balance. Subfield 2. Can map to corresponding  BAI code based on number of business days.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="tns:PriorBalanceData">
+				<xsd:sequence>
+					<xsd:element name="totalDebits" type="btamt:Amount" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">BAI Code 400.  The sum of all debit values for an account over a specific period.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="totalCredits" type="btamt:Amount" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">BAI Code 100.  The sum of all debit values for an account over a specific period. </xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:choice minOccurs="0">
+						<xsd:element name="floatAmounts" type="tns:FloatAmounts"/>
+						<xsd:element name="forwardAvailableAmounts" type="tns:ForwardAvailableAmounts"/>
+					</xsd:choice>
+					<xsd:element name="AdditionalBalanceTypes" type="btamt:nameAmountPairList" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="FloatAmounts">
+		<xsd:sequence>
+			<xsd:element name="zeroDayFloat" type="btamt:Amount" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Corresponds to BAI Code 070 </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="oneDayFloat" type="btamt:Amount" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Corresponds to BAI Code 072 or computed based on SWIFT Tag 65 on an MT940  with available date of plus 1 business days</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="twoDayFloat" type="btamt:Amount" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Corresponds to BAI Code 074  or computed based ono SWIFT Tag 65 on an MT940  with available date of plus 2 business days</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="threeDayFloat" type="btamt:Amount" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Corresponds to BAI Code 075 or computed based on SWIFT Tag 65 on an MT940  with available date of plus 3 business days</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="fourDayFloat" type="btamt:Amount" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Corresponds to BAI Code 079 or computed based ono SWIFT Tag 65 on an MT940  with available date of plus 4 business days </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="fiveDayFloat" type="btamt:Amount" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Corresponds to BAI Code 080 or computed based on SWIFT Tag 65 on an MT940  with available date of plus 5 business days </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="sixDayFloat" type="btamt:Amount" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Corresponds to BAI Code 081 or computed based on SWIFT Tag 65 on an MT940  with available date of plus 6 business days</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="floatAdjustment" type="btamt:Amount" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Corresponds to BAI Code 073</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="totalFloat" type="btamt:Amount" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Corresponds to BAI Code 063</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ForwardAvailableAmounts">
+		<xsd:sequence>
+			<xsd:element name="forwardAvailable1" type="btamt:Amount" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Corresponds to SWIFT Tag 65 on an MT940  with available date of plus 1 business days or computed based on BAI Code 072 (1 day float) plus closing available </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="forwardAvailable2" type="btamt:Amount" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Corresponds to SWIFT Tag 65 on an MT940  with available date of plus 2 business days or computed based on BAI Code 074 (2 day float) plus closing available</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="forwardAvailable3" type="btamt:Amount" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Corresponds to SWIFT Tag 65 on an MT940  with available date of plus 3 business days or computed based on BAI Code 075 (3 day float) plus closing available</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="forwardAvailable4" type="btamt:Amount" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Corresponds to SWIFT Tag 65 on an MT940  with available date of plus 4 business days or computed based on BAI Code 079 (4 day float) plus closing available </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="forwardAvailable5" type="btamt:Amount" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Corresponds to SWIFT Tag 65 on an MT940  with available date of plus 5 business days or computed based on BAI Code 080 (5 day float) plus closing available</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="forwardAvailable6" type="btamt:Amount" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Corresponds to SWIFT Tag 65 on an MT940  with available date of plus 6 business days or computed based on BAI Code 081 (6 day float) plus closing available</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="CurrentBalanceDataExtended">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">Extended current balance data structure.Includes name, value pairs to support additional balance types.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="tns:CurrentBalanceData">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Bank details for the bank associated with account (by bank code) including name and codes (internal, BIC, ABA)</xsd:documentation>
+				</xsd:annotation>
+				<xsd:sequence minOccurs="0">
+					<xsd:element name="floatAmounts" type="tns:FloatAmounts" minOccurs="0"/>
+					<xsd:element name="AdditionalBalanceTypes" type="btamt:nameAmountPairList" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+
+	<xsd:complexType name="AccountBalanceBase">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">Basic account and date information for balance data.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="account" type="btacct:AccountData" nillable="false">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en"> Standard account information</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="statementDate" type="xsd:date" nillable="false">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en"> The as of date for the balances</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="bankId" type="btbank:BankIdentifier" nillable="false">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Bank details for the source of balance information including name and codes (internal, BIC, ABA)</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="reportedTimestamp" type="xsd:dateTime" nillable="false">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Timestamp indicating latest update to balance information</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="CurrentAccountBalances">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">Current day balance data structure.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="tns:AccountBalanceBase">
+				<xsd:sequence>
+					<xsd:element name="balances" type="tns:CurrentBalanceInfoExtended" minOccurs="0" maxOccurs="unbounded">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">Collection of balances for the account for a each available currency</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="PriorAccountBalances">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">Prior day balance data structure.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="tns:AccountBalanceBase">
+				<xsd:sequence>
+					<xsd:element name="balances" type="tns:PriorBalanceInfoExtended" minOccurs="0" maxOccurs="unbounded">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">Collection of balances for the account for a each available currency</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="BalanceInfoBase">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">Basic balance data structure for a specific currency.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="currency" type="btamt:CurrencyCode" nillable="false">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">The currency in which this set of balances is reported.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="openingLedger" type="btamt:Amount" nillable="true">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en"> The ledger balance at the start of the business day. BAI code 010 or Tag 60F in SWIFT MT940.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="openingAvailable" type="btamt:Amount" nillable="true">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">BAI Code 040 or SWIFT tag 60F </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="CurrentBalanceInfo">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">Current balance data structure. Extends basic balance structure to add current available and ledger balances.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="tns:BalanceInfoBase">
+				<xsd:sequence>
+					<xsd:element name="currentLedger" type="btamt:Amount" nillable="true">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">Balance calculated based on opening ledger and sum of debits and credits (intra-day transactions and previously posted forward dated transactions for this day) impacting the ledger balance </xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="currentAvailable" type="btamt:Amount" nillable="true">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">Balance calculated based on opening available and sum of debits and credits  (intra-day transactions and previously posted forward dated transactions for this day) impacting the available balance </xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="totalDebits" type="btamt:Amount" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">Sum of intra-day debits if availableand used to calculate current balances.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="totalCredits" type="btamt:Amount" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">Sum of intra-day credits if available and used to calculate current balances.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="unclearedFunds" type="btamt:Amount" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">Amount of funds posted but not yet available (ledger - available).</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="CurrentBalanceInfoExtended">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">Extended current balance data structure.Includes name, value pairs to support additional balance types.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="tns:CurrentBalanceInfo">
+				<xsd:sequence minOccurs="0">
+					<xsd:element name="floatAmounts" type="tns:FloatAmounts" minOccurs="0"/>
+					<xsd:element name="AdditionalBalanceTypes" type="btamt:nameAmountPairList" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="PriorBalanceInfo">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">Prior balance data structure. Extends basic balance structure to add closing balances.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="tns:BalanceInfoBase">
+				<xsd:sequence>
+					<xsd:element name="closingLedger" type="btamt:Amount" nillable="true">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">Corresponds to tag 62F on a SWIFT MT940 or MT950 message. This value is obtained from the GIR Balance Detail record with BAI Code = “015”.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="closingAvailable" type="btamt:Amount" nillable="true">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">Corresponds to tag  tag 64 on a SWIFT MT940 or MT950 message. This value is obtained from the GIR Balance Detail record with BAI Code = “045”.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="PriorBalanceInfoExtended">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">Extended Prior balance data structure.Includes forward or float balances plus total debits and credits.S.W.I.F.T. field 65 Forward Available Funds. Subfield 2 date indicates the day on which funds are availableto the customer. To determine the BAI type code for reporting funds availability, calculate the number of business days between this date and the date in field 62F Closing Balance. Subfield 2. Can map to corresponding  BAI code based on number of business days.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="tns:PriorBalanceInfo">
+				<xsd:sequence>
+					<xsd:element name="totalDebits" type="btamt:Amount" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">BAI Code 400.  The sum of all debit values for an account over a specific period.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="totalCredits" type="btamt:Amount" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">BAI Code 100.  The sum of all debit values for an account over a specific period. </xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:choice minOccurs="0">
+						<xsd:element name="floatAmounts" type="tns:FloatAmounts"/>
+						<xsd:element name="forwardAvailableAmounts" type="tns:ForwardAvailableAmounts"/>
+					</xsd:choice>
+					<xsd:element name="AdditionalBalanceTypes" type="btamt:nameAmountPairList" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+</xsd:schema>

@@ -1,0 +1,560 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2010 rel. 2 (x64) (http://www.altova.com) by Bottomline Technologies (Bottomline Technologies) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:btugt="http://www.bottomline.com/webseries/schema/ps/tmaint/usergroup/v1" targetNamespace="http://www.bottomline.com/webseries/schema/ps/tmaint/usergroup/v1" elementFormDefault="unqualified" attributeFormDefault="unqualified" version="1.0">
+	<!--Based on BTWS 7.0-->
+	<!--Last Updated 1/21/2011-->
+	<xs:complexType name="ClientUserGroupType">
+		<xs:annotation>
+			<xs:documentation>Client user group settings</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="UserGroup" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>User Group - values stored in BTWS Client Schema UserGroup table.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="UserGroup" type="xs:string">
+							<xs:annotation>
+								<xs:documentation>Primary Key
+Protected in Modify</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="ParentUserGroup" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>ID of Parent usergroup.  If Group Type is Child enter valid parent usergroup. If GroupLevel is Parent enter itself
+Protected in Modify</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="50"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="ServiceUserGroup" fixed="CBAO" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Default to CBAO </xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="50"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="GroupName" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Free Type. descriptive name of usergroup. Information only.  </xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="50"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="GroupLevel" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>0=Parent User Group, 1=Child User Group</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:integer">
+									<xs:minInclusive value="0" fixed="false"/>
+									<xs:maxInclusive value="1"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="BaseCurrency" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>ISO currecy code for the usergroup.  Used to convert amounts and balances into a base currency.  For example USD, CAD or JPY</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:length value="3"/>
+									<xs:pattern value="[A-Z][A-Z][A-Z]"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="TimeOutMinutes" minOccurs="0" maxOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Reserved for future use.  Default to 15.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:positiveInteger">
+									<xs:totalDigits value="10"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="PasswordExpire" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Number of days the default password expiry is set to for each user.  Can be over-ridden when creation users.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:positiveInteger">
+									<xs:totalDigits value="10"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="ReportServerCode" minOccurs="0" maxOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="12"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="ModifiedBy" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Audit for the coresponding action.  Read-only.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="8"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="ModifiedByTimeStamp" type="xs:dateTime" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Audit for the coresponding action.  Read-only.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="EnteredBy" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Audit for the coresponding action.  Read-only.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="8"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="EnteredByTimeStamp" type="xs:dateTime" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Audit for the coresponding action.  Read-only.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="GroupAddrLine1" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Information only.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="35"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="GroupAddrLine2" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Informationn only</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="35"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="GroupAddrLine3" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Information only</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="35"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="SuperUserInd" type="xs:int" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Indicates the customer usergroup supports "single approval" for entitlements.
+0 = not supported.
+1 = supported.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="TimeZoneID" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>See the TimeZones table in the BTWS Client Schema for a list of acceptable values.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="40"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="GMTOffset" type="xs:integer" minOccurs="0" maxOccurs="0"/>
+						<xs:element name="PaymentApprovalType" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>0=Voter Approval
+1=Panel Approval</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:int">
+									<xs:minInclusive value="0"/>
+									<xs:maxInclusive value="1"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="Dashboard" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Reserved for future use.  Read-only.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="64"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="DefaultAdminPassword" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Password for default customer admin.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="20"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="DisableUG" type="xs:int" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>0 – UserGroup is enabled
+1 – UserGroup is disabled</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="EmailAddress" minOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="80"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="FaxNumber" minOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="35"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="PhoneNumber" minOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="35"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="ContactTitle" minOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="35"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="ContactName" minOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:minLength value="0"/>
+									<xs:maxLength value="35"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="UserGroupRTGS" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>RTGS - values stored in BTWS Client Schema RTGSUserGroup table</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="AgreementFormFlag" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Available within table but not used.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="AllowContractRateOverride" type="xs:int" minOccurs="0"/>
+						<xs:element name="Class" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>User Group Class code
+Branch = BR
+Internal = IN
+External = EX</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="Branch"/>
+									<xs:enumeration value="External"/>
+									<xs:enumeration value="Internal"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="FreeFormDebitFlag" type="xs:int" minOccurs="0"/>
+						<xs:element name="FXDiscountTier" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Must be a value found in BTWS Client Schema RTGSExchangeRateTier table Tier column.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="8"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="FXID" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>IDPS identifier</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="16"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="FXRateType" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>0 = Real Time Rates
+1 = Exchange Rate table</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:integer">
+									<xs:minInclusive value="0"/>
+									<xs:maxInclusive value="1"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="GLAccountDebitFlag" type="xs:int" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Allow GL Account Debit</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="MaxApprovalSignatures" minOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:integer">
+									<xs:minInclusive value="1"/>
+									<xs:maxInclusive value="6"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="AutoRateThreshold" type="xs:decimal" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Threshold for autorate workflow</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="DefaultCreditCurrencyFlag" type="xs:int" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>0 = Credit currency defaults to the debit currncy (single currency default)
+1 = Credit Currency defaults to Bene Bank Country or Bene Country currency</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="UserGroupACH" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>ACH - values stored in BTWS Client Schema ACHUserGroup table</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ACHClass" fixed="External" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>User Group Class</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="Branch"/>
+									<xs:enumeration value="External"/>
+									<xs:enumeration value="Internal"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="ACHMaxApprovalSig" minOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:integer">
+									<xs:minInclusive value="1"/>
+									<xs:maxInclusive value="6"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="SettlementBasis" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Pref, NPref. It is an optional field in the interface and has a default value of NPref.  Pref indicates Prefunded UserGroups and allows a different cutoff time from  non-prefunded </xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="5"/>
+									<xs:minLength value="1"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="UserGroupCLM" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>CLM - values stored in BTWS Client Schema CLMUserGroup table</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="CLMMaxApprovalSig" minOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:integer">
+									<xs:minInclusive value="1"/>
+									<xs:maxInclusive value="6"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="UserGroupCustom" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Custom UserGroup fields that are stored in sibling tables</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="CustomField" minOccurs="0" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="name" type="xs:string"/>
+									<xs:element name="value" type="xs:string"/>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="Action">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Add"/>
+					<xs:enumeration value="Modify"/>
+					<xs:enumeration value="Delete"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="CloneUserGroup">
+		<xs:annotation>
+			<xs:documentation>Incllued this element to request a creating usergroup from a template or existing usergroup</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="SourceUserGroup">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="50"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="NewUserGroup">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="50"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="CloneRoles" type="xs:int" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>0=Do not Clone Roles, 1=Clone Roles from Source usergroup to new usergroup
+Optional, if not inlcuded do not clone roles</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="GroupName" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Free Type. descriptive name of usergroup. Information only.  </xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="35"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="GroupLevel" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>0=Parent User Group, 1=Child User Group
+Optional, if not inlcuded default to Parent</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:integer">
+						<xs:minInclusive value="0" fixed="false"/>
+						<xs:maxInclusive value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="DefaultAdminPassword" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Password for default customer admin.</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="20"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="BaseCurrency" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>ISO currecy code for the usergroup.  Used to convert amounts and balances into a base currency.  For example USD, CAD or JPY</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:length value="3"/>
+						<xs:pattern value="[A-Z][A-Z][A-Z]"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="TimeZoneID" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>See the TimeZones table in the BTWS Client Schema for a list of acceptable values.</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="40"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="SuperUserInd" type="xs:int" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Indicates the customer usergroup supports "single approval" for entitlements.
+0 = not supported.
+1 = supported.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="GroupAddrLine1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Information only.</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="35"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="GroupAddrLine2" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Informationn only</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="35"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="GroupAddrLine3" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Information only</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="35"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="PaymentApprovalType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>0=Voter Approval
+1=Panel Approval</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:int">
+						<xs:minInclusive value="0"/>
+						<xs:maxInclusive value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="Action"/>
+	</xs:complexType>
+</xs:schema>

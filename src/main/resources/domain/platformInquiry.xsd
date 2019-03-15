@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:btinq="http://www.bottomline.com/webseries/schema/ps/platform/inquiry/v1" xmlns:btws="http://www.bottomline.com/webseries/schema/ps/platform/common/v1" xmlns:tns="http://www.bottomline.com/webseries/schema/ps/platform/inquiry/v1" targetNamespace="http://www.bottomline.com/webseries/schema/ps/platform/inquiry/v1" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/common/v1" schemaLocation="platformCommon.xsd"/>
+	<xsd:complexType name="ColumnHeaderData">
+		<xsd:annotation>
+			<xsd:documentation>Defines header data for a specific column e.g. specifying data type / field sizes of columns which could be used to help build a grid to display the items</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="fieldName" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>Column name from underlying data set that is to be displayed.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="fieldType" type="xsd:string">
+				<xsd:annotation>
+					<!-- Source of this is InquiryOutputFormatter getFieldType -->
+					<xsd:documentation>String representation of the data type numeric value i.e.. text, amount, date, gmtdate, edittext, editcheckbox, readonlycheckbox, numeric, hidden</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="displayName" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>Localised displayable name for the column</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="displayKey" type="xsd:string" nillable="true">
+				<xsd:annotation>
+					<!-- TODO Do we still require this if displayName is a localised form? -->
+					<xsd:documentation>Displayable code for the column which should be localised</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="displayOrder" type="xsd:integer" nillable="true">
+				<xsd:annotation>
+					<xsd:documentation>Order in which columns will displayed.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="fieldSize" type="xsd:integer" nillable="true">
+				<xsd:annotation>
+					<!--  TODO Isn't this usually the length from the schema? Does it exist to support requirements where we want to configure a different  ( reduced ) maximum length for the field?  -->
+					<xsd:documentation>Size of the field</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="location" type="xsd:string" nillable="true">
+<!-- 				<xsd:annotation>
+					TODO Doesn't appear to be used
+					<xsd:documentation>TODO Doesn't appear to be used</xsd:documentation>
+				</xsd:annotation>
+ -->			</xsd:element>
+			<xsd:element name="defaultsort" type="xsd:integer" nillable="true">
+				<xsd:annotation>
+					<xsd:documentation>Column default sort order options</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="type" type="xsd:integer" nillable="true">
+				<xsd:annotation>
+					<xsd:documentation>Numeric data type of field</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="currencyCol" type="xsd:string" nillable="true">
+				<xsd:annotation>
+					<xsd:documentation>Used to identify currency column when formatting cell of grid. Contains the column name.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="tooltipCol" type="xsd:string" nillable="true">
+<!-- 				<xsd:annotation>
+					<xsd:documentation>TODO Is this still used?</xsd:documentation>
+				</xsd:annotation>
+ -->			</xsd:element>
+			<xsd:element name="hidden" type="xsd:boolean" nillable="true">
+				<xsd:annotation>
+					<!--  TODO What is the intention of this? -->
+					<xsd:documentation>Determines if the column is present in the model but should be hidden</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="notSearchable" type="xsd:boolean" nillable="true">
+				<xsd:annotation>
+					<xsd:documentation>Determines if searches are allowed on this field</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+            <xsd:element name="alignment" type="xsd:integer" nillable="true">
+                <xsd:annotation>
+                    <xsd:documentation>Specifies the alignment of the column. Left = 0, Right = 1 and Center = 2</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>  			
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ColumnData">
+		<xsd:annotation>
+			<xsd:documentation>Defines value data for a specific column</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="fieldName" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>Name of the field</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="fieldValue" type="xsd:string" nillable="true">
+				<xsd:annotation>
+					<xsd:documentation>Value of the field</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="RowData">
+		<xsd:sequence>
+			<xsd:element name="columns" type="btinq:ColumnData" minOccurs="0" maxOccurs="unbounded">
+					<xsd:annotation>
+						<xsd:documentation>Columns within for the row</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="RowDataWithCxt">
+		<xsd:annotation>
+			<xsd:documentation>Add a context object for each row</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="tns:RowData">
+				<xsd:sequence>
+				<xsd:element name="context" type="btws:ServiceClientContext"
+					minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation>Additional service context associated with the row when the request was made</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="RowDataWithMapData">
+		<xsd:annotation>
+			<xsd:documentation>Add a context object for each row</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="tns:RowData">
+				<xsd:sequence>
+					<xsd:element name="mapDataList" type="btinq:MapData" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="MapData">
+		<xsd:sequence>
+			<xsd:element name="order" type="xsd:int"/>
+			<xsd:element name="toField" type="xsd:string"/>
+			<xsd:element name="value" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="QueryRow">
+		<xsd:sequence>
+			<xsd:element name="rowId" type="xsd:int"/>
+			<xsd:element name="mapDataList" type="btinq:MapData" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="name" type="xsd:string"/>
+			<xsd:element name="label" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="QueryData">
+		<xsd:sequence>
+			<xsd:element name="numRows" type="xsd:int"/>
+			<xsd:element name="queryRows" type="btinq:QueryRow" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+		<xsd:complexType name="LookupRow">
+		<xsd:sequence>
+			<xsd:element name="rowId" type="xsd:int"/>
+			<xsd:element name="mapDataList" type="btinq:MapData" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="columns" type="btinq:ColumnData" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="selectable" type="xsd:boolean"/>
+			<xsd:element name="selected" type="xsd:boolean"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="LookupData">
+		<xsd:sequence>
+			<xsd:element name="numRows" type="xsd:int"/>
+			<xsd:element name="lookupRows" type="btinq:LookupRow" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+</xsd:schema>

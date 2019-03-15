@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:btws="http://www.bottomline.com/webseries/schema/ps/platform/common/v1"
+	xmlns:btfilter="http://www.bottomline.com/webseries/schema/ps/platform/filter/v1"
+	xmlns:btmsg="http://www.bottomline.com/webseries/schema/ps/message/common/v1" 
+	xmlns:tns="http://www.bottomline.com/webseries/schema/ps/platform/filter/v1" 
+	targetNamespace="http://www.bottomline.com/webseries/schema/ps/platform/filter/v1"
+	elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/common/v1" schemaLocation="platformCommon.xsd"/>
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/message/common/v1" schemaLocation="../services/platformMessage.xsd"/>
+	<xsd:complexType name="FilterFieldData">
+		<xsd:sequence>
+			<xsd:element name="fieldName" type="xsd:string"/>
+			<xsd:element name="displayName" type="xsd:string"/>
+			<xsd:element name="dataType" type="xsd:string"/>
+			<xsd:element name="filterSelectionData" type="btfilter:FilterSelectionData" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="FilterSelectionData">
+		<xsd:sequence>
+			<xsd:element name="label" type="xsd:string"/>
+			<xsd:element name="value" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="FilterFieldOperator">
+		<xsd:sequence>
+			<xsd:element name="opLabel" type="xsd:string"/>
+			<xsd:element name="opValue" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="AdvanceFilterFieldData">
+		<xsd:sequence>
+			<xsd:element name="fieldName" type="xsd:string"/>
+			<xsd:element name="displayName" type="xsd:string"/>
+			<xsd:element name="dataType" type="xsd:string"/>
+			<xsd:element name="filterSelectionData" type="btfilter:FilterSelectionData" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="filterFieldOperator" type="tns:FilterFieldOperator" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>		
+	<xsd:complexType name="FilterField">
+		<xsd:annotation>
+			<xsd:documentation>Describes sort and selection criteria for a field that can be made available to be used</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="fieldName" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>Name of the value</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="displayName" type="xsd:string" nillable="true">
+				<xsd:annotation>
+					<xsd:documentation>Localised display name to use for the field</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="type" type="xsd:int" default="0">
+				<xsd:annotation>
+					<xsd:documentation>The type of the filter field</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="displayOrder" type="xsd:int" default="-1">
+<!-- 				<xsd:annotation>
+					<xsd:documentation>TODO This has some rather large values and I believe is rarely used / honoured in the UI?</xsd:documentation>
+				</xsd:annotation>
+ -->			</xsd:element>
+			<xsd:element name="sortable" type="xsd:boolean" default="false">
+				<xsd:annotation>
+					<xsd:documentation>Determines whether the field can also have sorting applied</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="mandatory" type="xsd:boolean" default="false">
+				<xsd:annotation>
+					<xsd:documentation>Determines whether the field value must be passed when a query is submitted</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="popupId" type="xsd:int" default="0">
+				<xsd:annotation>
+					<xsd:documentation>Inquiry identifier for any pop up filter to be used to provide values for this filter field</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="fieldType" type="xsd:string" nillable="true">
+				<xsd:annotation>
+					<xsd:documentation>Field types such as ALPHA / NUMERIC or NACHA which determine the character sets allowed for the field</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="groupId" type="xsd:string" nillable="true">
+<!-- 				<xsd:annotation>
+					<xsd:documentation>TODO A logical grouping of fields?</xsd:documentation>
+				</xsd:annotation>
+ -->			</xsd:element>
+			<xsd:element name="operator" type="xsd:string" nillable="true">
+<!-- TODO link the model to a generic operator list section?
+ -->				<xsd:annotation>
+					<xsd:documentation>The operator to use when searching. </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="value" type="xsd:string" nillable="true">
+				<xsd:annotation>
+					<xsd:documentation>The value to use when using the filter with this field</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="codeField" type="xsd:string" nillable="true">
+<!-- 				<xsd:annotation>
+					<xsd:documentation>TODO This doesn't appear to be referenced and used anywhere for any business logic</xsd:documentation>
+				</xsd:annotation>
+ -->			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="FilterFieldInfo">
+		<xsd:complexContent>
+			<xsd:extension base="btws:FieldInfo">
+				<xsd:sequence>
+					<xsd:element name="filterType" type="xsd:int"/>
+					<xsd:element name="popupId" type="xsd:int" nillable="true"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="FilterFieldGroupInfo">
+		<xsd:complexContent>
+			<xsd:extension base="btws:FieldGroup">
+				<xsd:sequence>
+					<xsd:element name="open" type="xsd:boolean"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="FilterFieldContainerInfo">
+		<xsd:sequence>
+			<xsd:element name="container" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Name for the container</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="label" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Applicatio Resource for the Container</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="rowNumber" type="xsd:int">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">container row number</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="numColumns" type="xsd:int">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">number of columns in the container (1, 2 or 3) </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="collapsible" type="xsd:int">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">if container is collapsible</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="groups" type="tns:FilterFieldGroupInfo" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">List of field groups within the container</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+ 		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="GetFilterFieldsRequest">
+		<xsd:sequence>
+			<xsd:element name="filterId" type="xsd:int" minOccurs="0" default="0"/>
+			<xsd:element name="alertType" type="xsd:string" minOccurs="0"  />
+			<xsd:element name="typeInfo" type="btws:TypeInfo"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="GetFilterFieldsResponse">
+		<xsd:sequence>
+			<xsd:element name="respHeader" type="btmsg:ResponseHeader"/>
+			<xsd:element name="typeInfo" type="btws:TypeInfo"/>
+			<xsd:element name="filterFieldInfoList" type="tns:FilterFieldInfo" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="filterFieldContainerInfoList" type="tns:FilterFieldContainerInfo" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

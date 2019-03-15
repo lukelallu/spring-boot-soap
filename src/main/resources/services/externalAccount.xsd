@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:tns="http://www.bottomline.com/webseries/schema/external/message/account/v1"
+        xmlns:btacct="http://www.bottomline.com/webseries/schema/ps/platform/account/v1"
+		xmlns:btmsg="http://www.bottomline.com/webseries/schema/ps/message/common/v1" 
+        targetNamespace="http://www.bottomline.com/webseries/schema/external/message/account/v1"
+        elementFormDefault="qualified"
+        attributeFormDefault="unqualified"
+        version="1.0">
+    <xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/account/v1" schemaLocation="../domain/platformAccount.xsd"/>
+ 	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/message/common/v1" schemaLocation="platformMessage.xsd"/>
+ 
+    <xsd:annotation>
+        <xsd:documentation xml:lang="en">WSDL operations wrapper for account data.</xsd:documentation>
+    </xsd:annotation>
+
+	<xsd:element name="getAccountRequest" type="tns:GetAccountRequest" nillable="true"/>
+	<xsd:element name="getAccountResponse" type="tns:GetAccountResponse" nillable="true"/>
+	<xsd:element name="deleteAccountRequest" type="tns:DeleteAccountRequest" nillable="true"/>
+	<xsd:element name="deleteAccountResponse" type="tns:DeleteAccountResponse" nillable="true"/>
+
+
+ 	<xsd:complexType name="GetAccountRequest">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">Request to external system to verify account info and provide additional details back</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="requestHeader" type="btmsg:RequestHeader">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">WebSeries standard request fields</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="accountWithEntitlements" type="btacct:AccountWithEntitlements">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">All of the account details including entitlements</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="GetAccountResponse">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">Response back from external system with additional details back</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="responseHeader" type="btmsg:ResponseHeader">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">WebSeries standard response fields</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		    <xsd:element name="accountResponse" type="btacct:AccountWithEntitlements"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+
+	<xsd:complexType name="DeleteAccountRequest">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">Request to external system to verify account info and provide additional details back</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="requestHeader" type="btmsg:RequestHeader">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">WebSeries standard request fields</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="accountWithEntitlements" type="btacct:AccountWithEntitlements">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Account Number and BankId</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="DeleteAccountResponse">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">Response back from external system with additional details back</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="responseHeader" type="btmsg:ResponseHeader">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">WebSeries standard response fields</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		    <xsd:element name="accountResponse" type="btacct:AccountWithEntitlements"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+</xsd:schema>

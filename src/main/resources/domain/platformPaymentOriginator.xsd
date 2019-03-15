@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:btws="http://www.bottomline.com/webseries/schema/ps/platform/common/v1" xmlns:tns="http://www.bottomline.com/webseries/schema/ps/platform/paymentoriginator/v1" targetNamespace="http://www.bottomline.com/webseries/schema/ps/platform/paymentoriginator/v1" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/common/v1" schemaLocation="platformCommon.xsd"/>
+	
+	<xsd:complexType name="PaymentOriginatorIdentifier">
+		<xsd:sequence>
+			<xsd:element name="userGroup" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>Key into the PaymentOriginator table.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="accountNum" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>Account Number.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="bankCode" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>Bank Code.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="name" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>Payment Originator Name.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+		
+		<xsd:attribute name="updateCount" type="xsd:integer" use="optional">
+			<xsd:annotation> 
+				<xsd:documentation>Used for optimistic locking</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:complexType>
+	
+	<xsd:complexType name="PaymentOriginator">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">Details of Payment Originator including identifier data</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="tns:PaymentOriginatorIdentifier">
+				<xsd:sequence>
+					<xsd:element name="addressLine1" type="xsd:string" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Address 1</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="addressLine2" type="xsd:string" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Address 2</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="addressLine3" type="xsd:string" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Address 3</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="country" type="xsd:string" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Country code of the originator.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	
+</xsd:schema>

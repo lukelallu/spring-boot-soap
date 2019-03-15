@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema targetNamespace="http://www.bottomline.com/webseries/schema/ps/message/mfa/v1"  xmlns:tns="http://www.bottomline.com/webseries/schema/ps/message/mfa/v1" xmlns:btmsg="http://www.bottomline.com/webseries/schema/ps/message/common/v1" xmlns:btws="http://www.bottomline.com/webseries/schema/ps/platform/common/v1" xmlns:btuser="http://www.bottomline.com/webseries/schema/ps/platform/user/v1" xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/common/v1" schemaLocation="../domain/platformCommon.xsd"/>
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/message/common/v1" schemaLocation="platformMessage.xsd"/>
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/user/v1" schemaLocation="../domain/platformUser.xsd"/>
+
+	<xsd:complexType name="MFAContact">
+		<xsd:annotation>
+			<xsd:documentation>Destination to which an OTP can be sent.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="type" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>Delivery method for OTP. Values can include email, sms and voice. </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="value" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>Depending on the type it could be an email address or any phone number</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="default" type="xsd:boolean">
+				<xsd:annotation>
+					<xsd:documentation>Determines whether this is the default destination contact for the user</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="MFASettingsRequest">
+		<xsd:annotation>
+			<xsd:documentation>Request for configured MFA settings for an action</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="challengedAction" type="btws:ActionData">
+				<xsd:annotation>
+					<xsd:documentation>Identifies the action the user was performing that caused the initial MFA challenge</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="userRequestingOnBehalfOf" type="btuser:UserIdentifier" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Identifies the user for whom to retrieve MFA settings when acting on behalf of that user</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="MFASettingsResponse">
+		<xsd:annotation>
+			<xsd:documentation>Response for configured MFA settings for an action</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="respHeader" type="btmsg:ResponseHeader">
+				<xsd:annotation>
+					<xsd:documentation>Response header</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="challengedAction" type="btws:ActionData" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Identifies the action the user was performing that caused the initial MFA challenge</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="challengeType" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>The type of challenge</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="contacts" type="tns:MFAContact" nillable="true" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Collection of destinations to which the OTP can be sent. Note this is only used for OTP.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="InitiateOutOfBandRequest">
+		<xsd:annotation>
+			<xsd:documentation>Request to initiate an out of band authentication</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="challengedAction" type="btws:ActionData">
+				<xsd:annotation>
+					<xsd:documentation>Identifies the action the user was performing that caused the initial MFA challenge</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="selection" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>The value of the configured MFA contact that the user selected</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="selectionType" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>The type of the configured MFA contact that the user selected</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="userRequestingOnBehalfOf" type="btuser:UserIdentifier" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Identifies the user for whom to initiate the out of band authentication</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="customParameters" type="btws:nameValuePairList" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Additional generic values for external systems to use if required</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="InitiateOutOfBandResponse">
+		<xsd:annotation>
+			<xsd:documentation>Response for a request to an out of band authentication</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="respHeader" type="btmsg:ResponseHeader">
+				<xsd:annotation>
+					<xsd:documentation>Response header</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="challengedAction" type="btws:ActionData">
+				<xsd:annotation>
+					<xsd:documentation>Identifies the action the user was performing that caused the initial MFA challenge</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="claimCheck" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>The unique identifier for the challenge to check the status of</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+
+    <xsd:complexType name="GetTokenRegistrationCodeRequest">
+        <xsd:annotation>
+            <xsd:documentation>Request to get token registration code</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+             <xsd:element name="customParameters" type="btws:nameValuePairList" minOccurs="0">
+                <xsd:annotation>
+                    <xsd:documentation>Additional generic values for external systems to use if required</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="tokenType" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="GetTokenRegistrationCodeResponse">
+        <xsd:annotation>
+            <xsd:documentation>Response to the request to validate MFA secrets</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="respHeader" type="btmsg:ResponseHeader">
+                <xsd:annotation>
+                    <xsd:documentation>Response header</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="registrationCode" type="xsd:string"/>
+            <xsd:element name="customParameters" type="btws:nameValuePairList" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Additional generic values for external systems to use if required</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="TokenActivationRequest">
+        <xsd:annotation>
+            <xsd:documentation>Request to get token registration code</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+             <xsd:element name="customParameters" type="btws:nameValuePairList" minOccurs="0">
+                <xsd:annotation>
+                    <xsd:documentation>Additional generic values for external systems to use if required</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="tokenType" type="xsd:string"/>
+            <xsd:element name="activationCode" type="xsd:string" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="TokenActivationResponse">
+        <xsd:annotation>
+            <xsd:documentation>Response to the request to validate MFA secrets</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="respHeader" type="btmsg:ResponseHeader">
+                <xsd:annotation>
+                    <xsd:documentation>Response header</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="UpdatePinRequest">
+        <xsd:annotation>
+            <xsd:documentation>Request to Update Pin</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+             <xsd:element name="customParameters" type="btws:nameValuePairList" minOccurs="0">
+                <xsd:annotation>
+                    <xsd:documentation>Additional generic values for external systems to use if required</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="tokenType" type="xsd:string"/>
+            <xsd:element name="newPin" type="xsd:string" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="UpdatePinResponse">
+        <xsd:annotation>
+            <xsd:documentation>Response to the request to Update Pin</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="respHeader" type="btmsg:ResponseHeader">
+                <xsd:annotation>
+                    <xsd:documentation>Response header</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="PerformMFAPreCheckRequest">
+        <xsd:annotation>
+            <xsd:documentation>Request to validate MFA secrets</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="challengedAction" type="btws:ActionData">
+                <xsd:annotation>
+                    <xsd:documentation>Identifies the action the user was performing that caused the initial MFA challenge</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="challengeType" type="xsd:string"/>
+            <xsd:element name="customParameters" type="btws:nameValuePairList" minOccurs="0">
+                <xsd:annotation>
+                    <xsd:documentation>Additional generic values for external systems to use if required</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="PerformMFAPreCheckResponse">
+        <xsd:annotation>
+            <xsd:documentation>Response to the request to validate MFA secrets</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="respHeader" type="btmsg:ResponseHeader">
+                <xsd:annotation>
+                    <xsd:documentation>Response header</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="challengedAction" type="btws:ActionData">
+                <xsd:annotation>
+                    <xsd:documentation>Identifies the action the user was performing that caused the initial MFA challenge</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="preCheckResult" type="tns:PreCheckResult"></xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+	<xsd:complexType name="ValidateMFARequest">
+		<xsd:annotation>
+			<xsd:documentation>Request to validate MFA secrets</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="challengedAction" type="btws:ActionData">
+				<xsd:annotation>
+					<xsd:documentation>Identifies the action the user was performing that caused the initial MFA challenge</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="oneTimePassword" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>One time password delivered to the user</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="tokenString" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Token</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="tokenPassCode" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Pass code associated with the token.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+            <xsd:element name="tokenPin" type="xsd:string" minOccurs="0">
+                <xsd:annotation>
+                    <xsd:documentation>User Pin for the Token.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+			<xsd:element name="userRequestingOnBehalfOf" type="btuser:UserIdentifier" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Identifies the user for whom to validate the out of band authentication</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="customParameters" type="btws:nameValuePairList" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Additional generic values for external systems to use if required</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ValidateMFAResponse">
+		<xsd:annotation>
+			<xsd:documentation>Response to the request to validate MFA secrets</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="respHeader" type="btmsg:ResponseHeader">
+				<xsd:annotation>
+					<xsd:documentation>Response header</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="challengedAction" type="btws:ActionData">
+				<xsd:annotation>
+					<xsd:documentation>Identifies the action the user was performing that caused the initial MFA challenge</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="InitiateActivatePhoneRequest">
+		<xsd:annotation>
+			<xsd:documentation>Request to deliver a  token to a user to activate a phone. This only applies to the SMS delivery method</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="phoneNumber" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>The number of the phone to activate</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="customParameters" type="btws:nameValuePairList" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Additional generic values for external systems to use if required</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="InitiateActivatePhoneResponse">
+		<xsd:annotation>
+			<xsd:documentation>Response for a request to deliver a token to a user to activate a phone. This only applies to the SMS delivery method</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="respHeader" type="btmsg:ResponseHeader">
+				<xsd:annotation>
+					<xsd:documentation>Response header</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="challengedAction" type="btws:ActionData">
+				<xsd:annotation>
+					<xsd:documentation>Identifies the action the user was performing that caused the initial MFA challenge</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="ValidateActivatePhoneRequest">
+		<xsd:sequence>
+			<xsd:element name="phoneNumber" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>The number of the phone to activate</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="passCode" type="xsd:string" minOccurs="0">
+<!-- Also this attribute is called passCode and tokenPaasCode exists in the ValidateMFARequest type. Is there a difference or is this the same and a naming inconsistency?
+ -->				<xsd:annotation>
+					<xsd:documentation>Pass code associated with the token.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="customParameters" type="btws:nameValuePairList" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Additional generic values for external systems to use if required</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ValidateActivatePhoneResponse">
+		<xsd:sequence>
+			<xsd:element name="respHeader" type="btmsg:ResponseHeader">
+				<xsd:annotation>
+					<xsd:documentation>Response header</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="challengedAction" type="btws:ActionData">
+				<xsd:annotation>
+					<xsd:documentation>Identifies the action the user was performing that caused the initial MFA challenge</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="MobileMFAChallengeStateRequest">
+		<xsd:sequence>
+			<xsd:element name="claimCheck" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>The unique identifier for the challenge to check the status of</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="MobileMFAChallengeStateResponse">
+		<xsd:sequence>
+			<xsd:element name="respHeader" type="btmsg:ResponseHeader">
+				<xsd:annotation>
+					<xsd:documentation>Response header</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+  
+    <xsd:simpleType  name="PreCheckResult">
+       <xsd:annotation>
+            <xsd:documentation xml:lang="en">MFA Context Information</xsd:documentation>
+       </xsd:annotation>
+       <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="PASS"/>
+            <xsd:enumeration value="FAIL"/>
+            <xsd:enumeration value="NOT_ACTIVE"/>
+       </xsd:restriction>
+    </xsd:simpleType>
+
+</xsd:schema>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.bottomline.com/webseries/schema/external/message/entitlements/v1" targetNamespace="http://www.bottomline.com/webseries/schema/external/message/entitlements/v1" xmlns:entitle="http://www.bottomline.com/webseries/schema/is/message/entitlement/v1"  elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+ 	<xsd:import namespace="http://www.bottomline.com/webseries/schema/is/message/entitlement/v1" schemaLocation="BTWS_Messages_Entitlements.xsd"/>
+	<xsd:element name="entitlementsEnquiryReqExt" type="entitle:EntitlementsEnquiryReq" nillable="true"/>
+	<xsd:element name="entitlementsEnquiryRspExt" type="entitle:EntitlementsEnquiryRsp" nillable="true"/>
+</xsd:schema>

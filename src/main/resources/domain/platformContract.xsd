@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2012 rel. 2 (x64) (http://www.altova.com) by Bottomline Technologies (Bottomline Technologies) -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:btamt="http://www.bottomline.com/webseries/schema/ps/platform/amount/v1" xmlns:btfx="http://www.bottomline.com/webseries/schema/ps/platform/fx/v1" xmlns:tns="http://www.bottomline.com/webseries/schema/ps/platform/contract/v1" targetNamespace="http://www.bottomline.com/webseries/schema/ps/platform/contract/v1" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/amount/v1" schemaLocation="platformAmount.xsd"/>
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/fx/v1" schemaLocation="platformFX.xsd"/>
+	<xsd:complexType name="ContractRec">
+		<xsd:sequence>
+			<xsd:element name="fxIdentifier" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>FX Identifier.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="baseCurrencyAmount" type="btamt:Amount">
+				<xsd:annotation>
+					<xsd:documentation>The base currency Amount.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="baseCurrencyCode" type="btamt:CurrencyCode">
+				<xsd:annotation>
+					<xsd:documentation>The base currency code.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="contraCurrencyCode" type="btamt:CurrencyCode">
+				<xsd:annotation>
+					<xsd:documentation>The contra currency code.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="buySellIndicator" type="btfx:BuySellIndicator">
+				<xsd:annotation>
+					<xsd:documentation>Requested Deal Type from the Customer's perspective.  Valid Values: Buy, Sell.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="transactionDate" type="xsd:date">
+				<xsd:annotation>
+					<xsd:documentation>The transaction date of the payment for which a rate under this contract is requested.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="contractInfo" type="tns:ContractInfo" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Contract Information.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ContractInfo">
+		<xsd:sequence>
+			<xsd:element name="contractId" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>The contract id.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="exchangeRate" type="xsd:double">
+				<xsd:annotation>
+					<xsd:documentation>Currency Exchange Rate.  Indicates the number of units of a currency that is equivalent to one unit of another currency.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ContractInfoExtended">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">Extended Contract Info data structure.Includes status for each contract, rate pair.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="tns:ContractInfo">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Bank details for the bank associated with account (by bank code) including name and codes (internal, BIC, ABA)</xsd:documentation>
+				</xsd:annotation>
+				<xsd:sequence>
+					<xsd:element name="status" type="tns:status">
+						<xsd:annotation>
+							<xsd:documentation>status for each contra item. Valid values are Valid, Invalid.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:simpleType name="status">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="Valid"/>
+			<xsd:enumeration value="Invalid"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="ContractResponseRec">
+		<xsd:sequence>
+			<xsd:element name="fxIdentifier" type="xsd:string" minOccurs="0" maxOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation>FX Identifier.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="baseCurrencyAmountt" type="btamt:Amount" minOccurs="0" maxOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation>The base currency Amount.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="baseCurrencyCode" type="btamt:CurrencyCode" minOccurs="0" maxOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation>The base currency code.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="contraCurrencyCode" type="btamt:CurrencyCode" minOccurs="0" maxOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation>The contra currency code.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="buySellIndicator" type="btfx:BuySellIndicator" minOccurs="0" maxOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation>Requested Deal Type from the Customer's perspective.  Valid Values: Buy, Sell.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="transactionDate" type="xsd:date" minOccurs="0" maxOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation>The transaction date of the payment for which a rate under this contract is requested.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="contractInfoExtended" type="tns:ContractInfoExtended" minOccurs = "0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Contract Information with status.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ xmlns:tns="http://www.bottomline.com/webseries/schema/ps/platform/accountsummary/v1"
+ targetNamespace="http://www.bottomline.com/webseries/schema/ps/platform/accountsummary/v1"
+  elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+	<xsd:complexType name="AccountConfigItem">
+		<xsd:sequence>
+			<xsd:element name="name" type="xsd:string"/>
+			<xsd:element name="label" type="xsd:string"/>
+			<xsd:element name="checked" type="xsd:boolean"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="AccountSummaryItem">
+		<xsd:sequence>
+			<xsd:element name="AccountFilter" type="xsd:string"/>
+			<xsd:element name="ClientAccountName" type="xsd:string"/>
+			<xsd:element name="AccountNumber" type="xsd:string"/>
+			<xsd:element name="CurrencyCode" type="xsd:string"/>
+			<xsd:element name="CurrentDayAvailable" type="xsd:decimal"/>
+			<xsd:element name="OpeningLedger" type="xsd:decimal"/>
+			<xsd:element name="StatementDate" type="xsd:date"/>
+			<xsd:element name="AccountType" type="xsd:string"/>
+			<xsd:element name="rowId" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+</xsd:schema>

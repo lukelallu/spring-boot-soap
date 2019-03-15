@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2012 rel. 2 (x64) (http://www.altova.com) by Bottomline Technologies (Bottomline Technologies) -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:btamt="http://www.bottomline.com/webseries/schema/ps/platform/amount/v1" xmlns:btfx="http://www.bottomline.com/webseries/schema/ps/platform/fx/v1" xmlns:tns="http://www.bottomline.com/webseries/schema/ps/platform/trade/v1" targetNamespace="http://www.bottomline.com/webseries/schema/ps/platform/trade/v1" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/amount/v1" schemaLocation="platformAmount.xsd"/>
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/fx/v1" schemaLocation="platformFX.xsd"/>
+	<xsd:complexType name="ForExQuoteInfo">
+		<xsd:annotation>
+			<xsd:documentation>Contains information about the Quote.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="forExQuoteType" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Identifies the type of FX Quote pricing strategy that is submitted as part of the request.  Valid values: FX Trade, Two-Way, Multi-Trade, Swap Near Leg, Offset, FX Option, FX Future, Time Deposit, Drawdown, FX Net Trade.  Default is FX Trade.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="forExRateType" type="btfx:ForExRateType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The requested rate type.  Valid Values: Live, Daily, Weekend, Indicative.  Default is Live.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="baseCurrencyCode" type="btamt:CurrencyCode">
+				<xsd:annotation>
+					<xsd:documentation>The base currency code.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="baseCurrencyAmount" type="btamt:Amount" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The amount of the base currency.  If supplied in the quote inquiry request, this amount will be echoed in the response.  If not supplied in the quote inquiry request, this amount will be calculated for the response using the retrieved ForEx rate applicable to the currency pair.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="baseCurDecimalsNo" type="btamt:DecimalPlaces" minOccurs="0"/>
+			<xsd:element name="contraCurrencyCode" type="btamt:CurrencyCode">
+				<xsd:annotation>
+					<xsd:documentation>The contra currency code.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+				<xsd:element name="contraCurrencyAmount" type="btamt:Amount" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The amount of the contra currency. </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="contraCurDecimalsNo" type="btamt:DecimalPlaces" minOccurs="0"/>
+			<xsd:element name="forExValueDateType" type="btfx:ForExValDtType">
+				<xsd:annotation>
+					<xsd:documentation>Value date type of the rate.  Valid Values: Cash, Tomorrow, Forward, Window.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="forExValueDate" type="xsd:date" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Required if ForExValDtType Forward. Do not use in request if ForExValDtType Spot, Cash, Tomorrow, Window.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="tranDate" type="xsd:date" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The transaction date of the FX Deal.  When provided in the request this indicates the day on which the customer would like the FX Deal booked.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="requestedForExRate" type="btfx:ExchangeRate" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Will be returned in a quote inquiry response.  Indicates the ForEx rate applicable to the base/contra currency code pair.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="TradeDealInfo">
+		<xsd:annotation>
+			<xsd:documentation>Provides a reference to the FX Quote.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="forExQuoteId" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>Unique identifier of the Quote.  </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="forExQuoteInfo" type="tns:ForExQuoteInfo" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Contains information about the Quote. Needed in the trade request and response to retrieve the contra amount, FX value date and other details when trade is success. </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="tNum" type="xsd:string" minOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation>The business identifier that uniquely identifies the Quote.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

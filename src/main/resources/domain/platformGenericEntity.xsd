@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+xmlns:tns="http://www.bottomline.com/webseries/schema/ps/platform/generic/v1"
+xmlns:btws="http://www.bottomline.com/webseries/schema/ps/platform/common/v1" 
+xmlns:btent="http://www.bottomline.com/webseries/schema/ps/platform/entitlements/v1" 
+targetNamespace="http://www.bottomline.com/webseries/schema/ps/platform/generic/v1"
+elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/common/v1" schemaLocation="platformCommon.xsd"/>
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/platform/entitlements/v1" schemaLocation="platformEntitlements.xsd"/>
+	<xsd:complexType name="EntityAttribute">
+		<xsd:sequence>
+			<xsd:element name="name" type="xsd:string"/>
+			<xsd:element name="value" type="xsd:string"/>
+		</xsd:sequence>
+		<xsd:attribute ref="btent:provisioningAction" use="optional"/>
+	</xsd:complexType>
+	<xsd:complexType name="GenericEntity">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">Simple representation of an entity as a list of attributes (name/value pairs).</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="entityType" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Type of entity described e.g. location</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="entityId" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">ID of entity described e.g. location name</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="attributes" type="tns:EntityAttribute" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Each attribute is a name/value pair.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+		<xsd:attribute ref="btent:provisioningAction" use="optional"/>
+	</xsd:complexType>
+	<xsd:complexType name="EntitiesByType">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">Collection of generic entities grouped by entity type</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="entityType" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Type of entity described e.g. location</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="entity" type="tns:GenericEntity" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">List of generic entities for the specified entity type</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+		<xsd:attribute ref="btent:provisioningAction" use="optional"/>
+	</xsd:complexType>
+</xsd:schema>

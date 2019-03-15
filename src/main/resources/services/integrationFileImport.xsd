@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.bottomline.com/webseries/schema/is/message/fileimport/v1" xmlns:btmsg="http://www.bottomline.com/webseries/schema/ps/message/common/v1" xmlns:xmime="http://www.w3.org/2005/05/xmlmime" targetNamespace="http://www.bottomline.com/webseries/schema/is/message/fileimport/v1" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+	<xsd:import namespace="http://www.bottomline.com/webseries/schema/ps/message/common/v1" schemaLocation="platformMessage.xsd"/>
+	<xsd:element name="FileUploadRequest" type="tns:FileUploadRequest" nillable="true"/>
+	<xsd:element name="FileUploadResponse" type="tns:FileUploadResponse" nillable="true"/>
+	<xsd:element name="InitiateImportRequest" type="tns:InitiateImportRequest" nillable="true"/>
+	<xsd:element name="InitiateImportResponse" type="tns:InitiateImportResponse" nillable="true"/>
+	<xsd:element name="NotificationsRequest" type="tns:NotificationsRequest" nillable="true"/>
+	<xsd:element name="NotificationsResponse" type="tns:NotificationsResponse" nillable="true"/>
+	
+	<xsd:complexType name="Notifications">
+		<xsd:sequence>
+			<xsd:element name="notificationType" type="xsd:string"/>
+			<xsd:element name="id" type="xsd:string"/>
+			<xsd:element name="notificationText" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="FileUploadRequest">
+		<xsd:sequence>
+			<xsd:element name="requestHeader" type="btmsg:RequestHeader"/>
+			<xsd:element name="fileName" type="xsd:string"/>
+			<xsd:element name="fileType" type="xsd:string"/>
+			<xsd:element name="fileData" type="xsd:base64Binary"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="FileUploadResponse">
+		<xsd:sequence>
+			<xsd:element name="respHeader" type="btmsg:ResponseHeader"/>
+			<xsd:element name="blobId" type="xsd:integer"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="InitiateImportRequest">
+		<xsd:sequence>
+			<xsd:element name="requestHeader" type="btmsg:RequestHeader"/>
+			<xsd:element name="blobId" type="xsd:integer"/>
+			<xsd:element name="fileName" type="xsd:string"/>
+			<xsd:element name="fileType" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="InitiateImportResponse">
+		<xsd:sequence>
+			<xsd:element name="respHeader" type="btmsg:ResponseHeader"/>
+			<xsd:element name="jobId" type="xsd:integer"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="NotificationsRequest">
+		<xsd:sequence>
+			<xsd:element name="requestHeader" type="btmsg:RequestHeader"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="NotificationsResponse">
+		<xsd:sequence>
+			<xsd:element name="respHeader" type="btmsg:ResponseHeader"/>
+			<xsd:element name="notificationMainMessage" type="xsd:string"/>
+			<xsd:element name="notifications" type="tns:Notifications" minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>
